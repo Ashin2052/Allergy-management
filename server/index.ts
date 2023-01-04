@@ -1,9 +1,20 @@
-import express from 'express';
-const app = express();
-const port = 9000;
-app.get('/', (req, res) => {
-    res.send('Server is up and running!');
+import express, { Request, Response, Application } from 'express';
+import bodyParser from 'body-parser';
+import routerManager from './src/routes';
+import connect from './connect';
+import {errorHandler} from "./src/utils/errorhandler";
+const mongoose = require("mongoose");
+
+require('dotenv').config({ path: `src/configs/.env.${process.env.NODE_ENV}` });
+
+const app: Application = express();
+
+app.listen(process.env.PORT || 9000, () => {
+    console.log(`Server is listening on ${process.env.PORT}`);
 });
-app.listen(port, () => {
-    console.log(`Server is listening on ${port}`);
-});
+connect({db: process.env.MONGODB_URI});
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded\
+app.use('/api', routerManager);
+app.use(errorHandler);
