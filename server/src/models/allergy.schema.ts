@@ -2,9 +2,18 @@ import mongoose, {Schema, model, Document} from 'mongoose';
 
 export interface IAllergy {
     id?:string,
-    name: string;
-    variant: string,
-    image: string,
+    name: string,
+    description: string,
+    severity: severityEnum,
+    symptoms: string,
+    cloudinaryId: string,
+    image?: any,
+}
+
+export enum severityEnum {
+    low ='LOW',
+    medium ='MEDIUM',
+    high ='HIGH',
 }
 
 const AllergySchema = new Schema<IAllergy>({
@@ -12,7 +21,16 @@ const AllergySchema = new Schema<IAllergy>({
             type: String,
             required: true,
         },
-        variant: {
+        description: {
+            type: String,
+            required: true,
+        },
+        severity: {
+            type: String,
+            enum: severityEnum,
+            required: true,
+        },
+        cloudinaryId: {
             type: String,
             required: true,
         },
