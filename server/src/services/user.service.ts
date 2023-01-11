@@ -43,16 +43,41 @@ export const login = async (req, res) => {
         });
 
         await UserSchema.findByIdAndUpdate(id, {refreshToken: refreshToken});
-
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000
-        });
-        res.json({accessToken});
+        res.json({accessToken, refreshToken, id, name, email});
     } catch (error) {
         res.status(404).json({msg: error.message ? error.message : "Email not found"});
     }
 }
+
+exports.generateRefreshToken = async (req, res) => {
+    try {
+        //get refreshToken
+        const {refreshToken} = req.body;
+        //send error if no refreshToken is sent
+        if (!refreshToken) {
+            return res.status(403).json({error: "Access denied,token missing!"});
+        } else {
+            //query for the token to check if it is valid:
+            const user = await UserSchema.findOne({refreshToken: refreshToken});
+            const {id, name, email, refreshToken} = user;
+
+            //send error if no token found:
+            if (!user) {
+                return res.status(401).json({error: "Token expired!"});
+            } else {
+                //extract payload from refresh token and generate a new access token and send it
+                const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+                const accessToken = jwt.sign({id, name, email}, process.env.ACCESS_TOKEN_SECRET, {
+                    expiresIn: '60s'
+                });
+                return res.status(200).json({accessToken});
+            }
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({error: "Internal Server Error!"});
+    }
+};
 
 export const logout = async (req, res) => {
     const refreshToken = req.cookies.refreshToken;

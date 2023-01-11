@@ -13,17 +13,18 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        login:(state,action) => {
-            initialState.isLoggedIn = false;
-            console.log(state,'state',action)
-
+        login: (state, action) => {
+            localStorage.setItem('accessToken',action.payload.accessToken)
+            localStorage.setItem('refreshToken',action.payload.refreshToken)
+            localStorage.setItem('userInfo',action.payload.userInfo)
         },
-        logout:() => {
+        logout: () => {
             initialState.isLoggedIn = false;
+            localStorage.clear()
         }
     }
 })
 
-export const { login, logout } = authSlice.actions;
+export const {login, logout} = authSlice.actions;
 
 export default authSlice.reducer

@@ -2,11 +2,10 @@ import {Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
 import React from "react";
 import "./Login.css";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import api from "../../shared/api";
 import {login} from "../../reducers/authreducer";
-
 
 const initialValues = {
     email: "",
@@ -27,12 +26,13 @@ export const Login = () => {
 
     const submitHandler = (formValues: any) => {
         api({
-            url: '/login',
+            url: 'user/login/',
             method: 'post',
             payload: formValues
         }).then((value) => {
-            dispatch(login(value))
+            dispatch(login(value.data));
         }).catch((err) => {
+            console.log(err)
         })
     };
 
@@ -102,5 +102,4 @@ export const Login = () => {
             }}
         </Formik>
     );
-
 }

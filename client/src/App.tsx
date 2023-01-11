@@ -1,7 +1,6 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import AppRoutes from "./shared/auth";
+import AppRoutes from "./routes";
 import {BrowserRouter} from "react-router-dom";
 
 function App() {
