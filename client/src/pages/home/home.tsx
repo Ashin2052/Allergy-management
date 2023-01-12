@@ -1,10 +1,8 @@
-
-
-export const Home = () =>{
-
+export const Home = () => {
 
     return (
         <div>
+            {/*{children}*/}
 
         </div>
     )

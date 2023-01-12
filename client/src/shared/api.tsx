@@ -1,4 +1,7 @@
 import axios, {AxiosHeaders} from 'axios';
+import { useRef } from 'react';
+import { useNavigate } from "react-router-dom"
+
 
 const baseUrl = process.env.REACT_APP_API_ENDPOINT;
 export const callApi = (data: IAxios) => {
@@ -14,7 +17,7 @@ axios.interceptors.request.use(
         const accessToken = localStorage.getItem("accessToken");
         if (accessToken) {
             if (config.headers instanceof AxiosHeaders) {
-                config.headers.set('x-auth-token', accessToken);
+                config.headers.set('x-access-token', accessToken);
             }
         }
         return config;
@@ -30,17 +33,24 @@ axios.interceptors.response.use(
         return response;
     },
     function (error) {
+        
+        const invalidStatus = error.response.status >= 400 && error.response.status < 500;
+        if(invalidStatus) {
+                    window.location.href = '/login';
+
+        }
         const originalRequest = error.config;
         let refreshToken = localStorage.getItem("refreshToken");
         if (
             refreshToken &&
-            error.response.status === 401 &&
+            invalidStatus &&
             !originalRequest._retry
         ) {
             originalRequest._retry = true;
             return callApi({
-                method: "get",
-                url: 'user/refresh_token'
+                method: "post",
+                url: 'user/refresh_token',
+                payload: {refreshToken}
             }).then((res) => {
                 if (res.status === 200) {
                     localStorage.setItem("accessToken", res.data.accessToken);

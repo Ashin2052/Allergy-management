@@ -5,7 +5,7 @@ import "./Login.css";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import api from "../../shared/api";
-import {login} from "../../reducers/authreducer";
+import {login} from "../../shared/reducers/authreducer";
 
 const initialValues = {
     email: "",
@@ -31,6 +31,7 @@ export const Login = () => {
             payload: formValues
         }).then((value) => {
             dispatch(login(value.data));
+            navigate('/home')
         }).catch((err) => {
             console.log(err)
         })

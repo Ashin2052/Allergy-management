@@ -8,6 +8,7 @@ export interface IAllergy {
     symptoms: string,
     cloudinaryId: string,
     image?: any,
+    notes?: string
 }
 
 export enum severityEnum {
@@ -37,7 +38,10 @@ const AllergySchema = new Schema<IAllergy>({
         image: {
             type: String,
             required: true,
-        }
+        },
+    notes: {
+            type:String
+    }
     },
     {
         timestamps: true

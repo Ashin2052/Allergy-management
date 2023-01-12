@@ -49,16 +49,16 @@ export const login = async (req, res) => {
     }
 }
 
-exports.generateRefreshToken = async (req, res) => {
+export const generateRefreshToken = async (req, res) => {
     try {
         //get refreshToken
-        const {refreshToken} = req.body;
+        const oldRefreshToken = req.body.refreshToken;
         //send error if no refreshToken is sent
-        if (!refreshToken) {
+        if (!oldRefreshToken) {
             return res.status(403).json({error: "Access denied,token missing!"});
         } else {
             //query for the token to check if it is valid:
-            const user = await UserSchema.findOne({refreshToken: refreshToken});
+            const user = await UserSchema.findOne({refreshToken: oldRefreshToken});
             const {id, name, email, refreshToken} = user;
 
             //send error if no token found:
@@ -67,10 +67,11 @@ exports.generateRefreshToken = async (req, res) => {
             } else {
                 //extract payload from refresh token and generate a new access token and send it
                 const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-                const accessToken = jwt.sign({id, name, email}, process.env.ACCESS_TOKEN_SECRET, {
-                    expiresIn: '60s'
+                console.log('ashi')
+
+                return jwt.sign({id, name, email}, process.env.ACCESS_TOKEN_SECRET, {
+                    expiresIn: '120s'
                 });
-                return res.status(200).json({accessToken});
             }
         }
     } catch (error) {

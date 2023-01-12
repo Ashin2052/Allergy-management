@@ -8,6 +8,11 @@ router.post('/register', async (req, res, next) => {
         .then(data => res.json(data))
         .catch(err => next(err));
 });
+router.post('/refresh_token', async (req, res, next) => {
+    userService.generateRefreshToken(req,res)
+        .then(data => res.json(data))
+        .catch(err => next(err));
+});
 
 router.post('/login', async (req, res, next) => {
     userService.login(req,res)
