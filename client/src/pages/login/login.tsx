@@ -30,7 +30,7 @@ export const Login = () => {
             method: 'post',
             payload: formValues
         }).then((value) => {
-            dispatch(login(value.data));
+            dispatch(login(value));
             navigate('/home')
         }).catch((err) => {
             console.log(err)

@@ -15,7 +15,7 @@ router.post('/refresh_token', async (req, res, next) => {
 });
 
 router.post('/login', async (req, res, next) => {
-    userService.login(req,res)
+    userService.login(req)
         .then(data => res.json(data))
         .catch(err => next(err));
 });

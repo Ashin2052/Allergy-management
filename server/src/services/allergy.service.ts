@@ -18,7 +18,7 @@ export const getAllergies = async (pagination?: Ipagination): Promise<any> => {
             currentPage: pagination.page
         })
     } catch (err) {
-        return err;
+        throw err;
     }
 }
 
@@ -29,7 +29,7 @@ export const createAllergy = async (allergy: IAllergy, file: any): Promise<any> 
         allergy.image = result.secure_url;
         return AllergySchema.create(allergy);
     } catch (err) {
-        return err;
+        throw err;
     }
 }
 
@@ -48,7 +48,7 @@ export const updateAllergy = async (allergy: IAllergy, file: any): Promise<any> 
             new: true
         });
     } catch (err) {
-        return err
+        throw err
     }
 }
 

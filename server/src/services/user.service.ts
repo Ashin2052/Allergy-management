@@ -26,14 +26,16 @@ export const register = async (req) => {
     }
 }
 
-export const login = async (req, res) => {
+export const login = async (req) => {
     try {
         const user = await UserSchema.findOne({
             email: req.body.email
         });
 
         const match = await bcrypt.compare(req.body.password, user.password);
-        if (!match) return res.status(400).json({msg: "Wrong Password"});
+        if (!match) {
+            throw new Error("Wrong Password");
+        }
         const {id, name, email} = user;
         const accessToken = jwt.sign({id, name, email}, process.env.ACCESS_TOKEN_SECRET, {
             expiresIn: '60s'
@@ -43,9 +45,9 @@ export const login = async (req, res) => {
         });
 
         await UserSchema.findByIdAndUpdate(id, {refreshToken: refreshToken});
-        res.json({accessToken, refreshToken, id, name, email});
+        return ({accessToken, refreshToken, id, name, email});
     } catch (error) {
-        res.status(404).json({msg: error.message ? error.message : "Email not found"});
+        throw ({msg: error.message ? error.message : "Email not found"});
     }
 }
 
@@ -67,11 +69,13 @@ export const generateRefreshToken = async (req, res) => {
             } else {
                 //extract payload from refresh token and generate a new access token and send it
                 const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-                console.log('ashi')
+                console.log('..payload generated....')
 
-                return jwt.sign({id, name, email}, process.env.ACCESS_TOKEN_SECRET, {
-                    expiresIn: '120s'
-                });
+                return {
+                    accessToken: jwt.sign({id, name, email}, process.env.ACCESS_TOKEN_SECRET, {
+                        expiresIn: '60s'
+                    })
+                }
             }
         }
     } catch (error) {

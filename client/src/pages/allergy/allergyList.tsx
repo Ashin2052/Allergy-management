@@ -1,6 +1,5 @@
-import React from "react";
+import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {Home} from "../home/home";
 
 import {
     Table,
@@ -17,12 +16,15 @@ import {EyeOutlined, PlusOutlined, DeleteOutlined} from "@ant-design/icons";
 import {
     ApiErrorResponse,
     ApiResponse,
-    Allergy,
+
 } from "../../types/shared.types";
-import {fetchAllergies, removeAllergy} from "../../shared/reducers/allergyreducer";
+import {createAllergy, fetchAllergies, removeAllergy} from "../../shared/reducers/allergyreducer";
 import {useAppDispatch, useAppSelector} from "../../shared/hooks/redux.hooks";
 import {ColumnsType} from "antd/es/table";
-import TableComponent from "../../shared/component/dataTable";
+import TableComponent from "../../shared/UI/dataTable";
+import {IAllergy} from "../../types/allergy.types";
+import {AllergyForm} from "./AllergyForm";
+import callApi from "../../shared/api";
 
 const {Title} = Typography;
 
@@ -30,6 +32,7 @@ const AllergyList = () => {
     const [api, contextHolder] = notification.useNotification();
 
     const allergy = useAppSelector((state) => state.allergy);
+    const [showCartForm, setShowCartForm] = useState(false);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
@@ -37,6 +40,9 @@ const AllergyList = () => {
         getAllergies();
     }, []);
 
+    const showHideFormHandler = () => {
+        setShowCartForm(!showCartForm);
+    }
     const getAllergies = async () => {
         try {
             await dispatch(fetchAllergies());
@@ -70,7 +76,7 @@ const AllergyList = () => {
         });
     };
 
-    const practitionerColumn: ColumnsType<Allergy> = [
+    const practitionerColumn: ColumnsType<IAllergy> = [
         {
             title: "Practitioner ID",
             dataIndex: "id",
@@ -110,7 +116,7 @@ const AllergyList = () => {
             title: "",
             key: "Actions",
             width: "300px",
-            render: (value: Allergy) => {
+            render: (value: IAllergy) => {
                 return (
                     <>
                         <Popconfirm
@@ -132,6 +138,15 @@ const AllergyList = () => {
         },
     ];
 
+    const onsubmitForm = (values: IAllergy) =>{
+        const formData = new FormData();
+        formData.append('name',values.name);
+        formData.append('image',values.image[0]);
+        formData.append('severity',values.severity);
+        formData.append('symptoms',values.symptoms);
+        formData.append('description',values.description);
+        dispatch(createAllergy(formData));
+    };
     return (
         <div>
             {contextHolder}
@@ -142,22 +157,23 @@ const AllergyList = () => {
                 style={{marginBottom: "24px"}}
             >
                 <Col span={4}>
-                    <Title level={2}>Practitioner List</Title>
+                    <Title level={2}>Allergy List</Title>
                 </Col>
                 <Col span={3}>
                     <Button
                         type="primary"
                         style={{width: "100%"}}
                         icon={<PlusOutlined/>}
-                        onClick={() => navigate("/practitioner/new")}
+                        onClick={showHideFormHandler}
                     >
-                        Add Practitioner
+                        Register Allergy
                     </Button>
                 </Col>
             </Row>
+            {showCartForm && <AllergyForm onSubmit={onsubmitForm} />}
 
             <TableComponent
-                columns={practitionerColumn} dataSource={allergy.allergies}            />
+                columns={practitionerColumn} dataSource={allergy.data.allergies}/>
         </div>
     );
 };

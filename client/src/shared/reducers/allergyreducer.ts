@@ -1,10 +1,11 @@
 import {createAsyncThunk, createSlice, Draft, PayloadAction,} from "@reduxjs/toolkit";
-import {Allergy, ApiErrorResponse,} from "../../types/shared.types";
+import { ApiErrorResponse,} from "../../types/shared.types";
 
 import {create, edit, fetchAll, remove,} from "../../services/allergy.service";
+import {IAllergy} from "../../types/allergy.types";
 
 interface IallergiesState {
-    allergies: any;
+    data: any;
     loading: boolean;
     isAdding: boolean;
     isEditing: boolean;
@@ -12,7 +13,11 @@ interface IallergiesState {
 }
 
 const initialState: IallergiesState = {
-    allergies: [],
+    data: {
+        allergies: [],
+        currentPage: 1,
+        totalPages: 1,
+    },
     loading: false,
     isAdding: false,
     isEditing: false,
@@ -38,7 +43,7 @@ export const fetchAllergies = createAsyncThunk(
 
 export const createAllergy = createAsyncThunk(
     "allergies/createAllergy",
-    async (payload: object, {rejectWithValue}) => {
+    async (payload: FormData, {rejectWithValue}) => {
         try {
             return await create(payload);
         } catch (err) {
@@ -64,8 +69,7 @@ export const removeAllergy = createAsyncThunk(
     "allergies/removeAllergy",
     async (id: any, {rejectWithValue}) => {
         try {
-            const res = await remove(id);
-            return res;
+            return await remove(id);
         } catch (err) {
             return rejectWithValue(err);
         }
@@ -78,7 +82,7 @@ const allergieslice = createSlice({
 
     reducers: {
         addAllergy: (state: Draft<IallergiesState>, action) => {
-            state.allergies.push(action.payload.data);
+            state.data.allergies.push(action.payload.data);
         },
     },
     extraReducers: (builder) => {
@@ -89,7 +93,7 @@ const allergieslice = createSlice({
         builder.addCase(
             fetchAllergies.fulfilled, (state: Draft<IallergiesState>, action: PayloadAction<any>) => {
                 state.loading = false;
-                state.allergies = action.payload.data;
+                state.data = action.payload;
             }
         );
 
@@ -98,7 +102,7 @@ const allergieslice = createSlice({
             fetchAllergies.rejected,
             (state: Draft<IallergiesState>, action: PayloadAction<any>) => {
                 state.loading = false;
-                state.allergies = [];
+                state.data.allergies = [];
 
                 state.error = {
                     data: {
@@ -116,7 +120,7 @@ const allergieslice = createSlice({
 
         builder.addCase(createAllergy.fulfilled, (state: Draft<IallergiesState>, action: any) => {
             state.isAdding = false;
-            state.allergies = [...state.allergies, action.payload.data];
+            state.data.allergies = [...state.data.allergies, action.payload.data];
         });
 
         builder.addCase(createAllergy.rejected, (state: Draft<IallergiesState>, action: any) => {
@@ -133,7 +137,7 @@ const allergieslice = createSlice({
 
             const {data} = action.payload;
 
-            state.allergies = state.allergies.map((item: Allergy) => {
+            state.data.allergies = state.data.allergies.map((item: IAllergy) => {
                 if (item.id === data.id) {
                     return {
                         ...item,
@@ -159,8 +163,8 @@ const allergieslice = createSlice({
             const {id} = action.payload.data.info;
 
 
-            state.allergies = state.allergies.filter(
-                (item: Allergy) => item.id !== id
+            state.data.allergies = state.data.allergies.filter(
+                (item: IAllergy) => item.id !== id
             );
         });
 

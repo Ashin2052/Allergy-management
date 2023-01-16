@@ -14,14 +14,14 @@ export const create = (payload: object | undefined | void) => {
         url: 'allergy',
         method: 'post',
         payload
-    })
+    }, true)
 };
 
 export const edit = (id: number, payload: object | undefined | void) => {
     return callApi({
         url: 'allergy',
         method: 'put'
-    })
+    }, true)
 };
 
 export const remove = (id: number) => {

@@ -1,4 +1,5 @@
 import any = jasmine.any;
+import {ReactChild, ReactChildren} from "react";
 
 export type Userlogin = {
     email: string;
@@ -28,22 +29,7 @@ export type Signup = {
     firstName: string;
     lastName: string;
 };
-export enum severityEnum {
-    low ='LOW',
-    medium ='MEDIUM',
-    high ='HIGH',
-}
 
-export type Allergy = {
-    id?:string,
-    name: string,
-    description: string,
-    severity: severityEnum,
-    symptoms: string,
-    cloudinaryId: string,
-    image?: any,
-    notes?: string
-}
 
 export  type  Itable = {
     dataSource: any[],
