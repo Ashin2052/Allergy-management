@@ -35,7 +35,14 @@ const UserSchema = new Schema<IUser>({
 
     },
     {
-        timestamps: true
+        timestamps: true,
+        id: true,
+        toJSON: {
+            transform(doc, user) {
+                user.id = user._id
+                delete user._id
+            }
+        }
     });
 
 export default model<IUser>("User", UserSchema)

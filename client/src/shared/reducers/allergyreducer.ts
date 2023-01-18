@@ -67,7 +67,7 @@ export const editAllergy = createAsyncThunk(
 
 export const removeAllergy = createAsyncThunk(
     "allergies/removeAllergy",
-    async (id: any, {rejectWithValue}) => {
+    async (id: string, {rejectWithValue}) => {
         try {
             return await remove(id);
         } catch (err) {
@@ -160,7 +160,7 @@ const allergieslice = createSlice({
         builder.addCase(removeAllergy.fulfilled, (state: Draft<IallergiesState>, action: any) => {
             state.loading = false;
 
-            const {id} = action.payload.data.info;
+            const {id} = action.payload;
 
 
             state.data.allergies = state.data.allergies.filter(

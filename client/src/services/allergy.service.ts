@@ -24,17 +24,10 @@ export const edit = (id: number, payload: object | undefined | void) => {
     }, true)
 };
 
-export const remove = (id: number) => {
+export const remove = (reqParams: string) => {
     return callApi({
         url: 'allergy',
-        method: "delete"
+        method: "delete",
+        reqParams,
     })
 };
-
-// export const uploadImage = (data: string) => {
-//     const url = interpolate(endpoints.IMAGE_UPLOAD);
-//     const modifiedPayload = JSON.stringify({ data: data });
-//     console.log(modifiedPayload);
-//
-//     return axios.post(url, modifiedPayload);
-// };

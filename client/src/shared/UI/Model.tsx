@@ -1,15 +1,16 @@
 import {Fragment} from "react";
 import ReactDOM from "react-dom";
+import './Model.css'
 
-const portalElement= document.getElementById('overlays') as HTMLElement;
+const portalElement = document.getElementById('overlays') as HTMLElement;
 
 const BackdropOverlay = () => {
 
-    return <div></div>;
+    return <div className="backdrop"></div>;
 }
 
-const ModelOverlay = (props:any) => {
-    return <div>
+const ModelOverlay = (props: any) => {
+    return <div className="modal">
         <div>
             {props.children}
         </div>

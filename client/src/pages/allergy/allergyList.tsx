@@ -25,6 +25,7 @@ import TableComponent from "../../shared/UI/dataTable";
 import {IAllergy} from "../../types/allergy.types";
 import {AllergyForm} from "./AllergyForm";
 import callApi from "../../shared/api";
+import Editable from "antd/es/typography/Editable";
 
 const {Title} = Typography;
 
@@ -33,6 +34,7 @@ const AllergyList = () => {
 
     const allergy = useAppSelector((state) => state.allergy);
     const [showCartForm, setShowCartForm] = useState(false);
+    const [selectEditAllergy, setSelectEditAllergy] = useState();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
@@ -56,32 +58,25 @@ const AllergyList = () => {
         }
     };
 
+    const onEdit = (value: any) => {
+        setSelectEditAllergy(value);
+        setShowCartForm(true);
+    }
+
     const handleDelete = async (id: string) => {
-        let response: ApiResponse;
         try {
-            response = await dispatch(removeAllergy(id)).unwrap();
+            await dispatch(removeAllergy(id));
         } catch (error) {
-            const err = error as ApiErrorResponse;
-
-            api["error"]({
-                message: err.message || "Something went wrong",
-                description: `${err.data.info}` || "",
-            });
-
             return;
         }
-        api["success"]({
-            message: response.message || "Something completed",
-            description: `${response.message}` || "",
-        });
     };
 
     const practitionerColumn: ColumnsType<IAllergy> = [
         {
-            title: "Practitioner ID",
             dataIndex: "id",
             key: "id",
             width: "0px",
+            render: () => ''
         },
         {
             title: "Name",
@@ -132,20 +127,37 @@ const AllergyList = () => {
                                 Delete
                             </Button>
                         </Popconfirm>
+
+                        <Button
+                            style={{marginLeft: "20px"}}
+                            type="primary"
+                            icon={<EyeOutlined/>}
+                            onClick={() =>onEdit(value)}
+
+                        >
+                            Edit
+                        </Button>
                     </>
                 );
             },
         },
     ];
 
-    const onsubmitForm = (values: IAllergy) =>{
-        const formData = new FormData();
-        formData.append('name',values.name);
-        formData.append('image',values.image[0]);
-        formData.append('severity',values.severity);
-        formData.append('symptoms',values.symptoms);
-        formData.append('description',values.description);
-        dispatch(createAllergy(formData));
+    const onsubmitForm = async (values: IAllergy) => {
+        try {
+            const formData = new FormData();
+            formData.append('name', values.name);
+            formData.append('image', values.image[0].originFileObj);
+            formData.append('severity', values.severity);
+            formData.append('symptoms', values.symptoms);
+            formData.append('description', values.description);
+            await dispatch(createAllergy(formData));
+            getAllergies().then(r => {
+            })
+            setShowCartForm(false)
+        } catch (err) {
+
+        }
     };
     return (
         <div>
@@ -170,7 +182,7 @@ const AllergyList = () => {
                     </Button>
                 </Col>
             </Row>
-            {showCartForm && <AllergyForm onSubmit={onsubmitForm} />}
+            {showCartForm && <AllergyForm allergy={selectEditAllergy} onSubmit={onsubmitForm}/>}
 
             <TableComponent
                 columns={practitionerColumn} dataSource={allergy.data.allergies}/>

@@ -17,12 +17,18 @@ router.get('/', auth, async (req, res, next) => {
         .catch(err => next(err));
 })
 
-router.post('/', upload.single('image'), async (req, res, next) => {
+router.post('/', upload.single('image'), auth, async (req, res, next) => {
     allergyService.createAllergy(req.body as IAllergy, req.file)
         .then(data => res.json(data))
         .catch(err => next(err));
 });
-router.put('/', upload.single('image'), async (req, res, next) => {
+router.delete('/:id', upload.single('image'), auth, async (req, res, next) => {
+    allergyService.deleteAllergy(req.params.id)
+        .then(data => res.json(data))
+        .catch(err => next(err));
+});
+
+router.put('/', upload.single('image'), auth, async (req, res, next) => {
     allergyService.updateAllergy(req.body as IAllergy, req.file)
         .then(data => res.json(data))
         .catch(err => next(err));

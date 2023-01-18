@@ -21,8 +21,9 @@ import {
 } from "@ant-design/icons";
 import {checkIfStringContainsSpaceInStartAndEnd} from "../../shared/utils/shared.utils";
 import {RcFile} from "antd/es/upload";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useAppSelector} from "../../shared/hooks/redux.hooks";
+import {isEmpty} from "../../shared/utils/string";
 
 
 export const AllergyForm = (props: any) => {
@@ -33,34 +34,49 @@ export const AllergyForm = (props: any) => {
     const practitioners = useAppSelector((store) => store.allergy);
     const [edit, setEdit] = useState(false);
 
-    const handleEdit = () => {
-        if (props?.id) {
 
+    useEffect(() => {
+        handleEdit();
+    }, []);
+
+    const handleEdit = () => {
+        if (props.allergy) {
+            let allergy = props.allergy;
+
+
+            form.setFieldsValue({
+                name: allergy.name,
+                severity: allergy.severity,
+                symptoms: allergy.symptoms,
+                description: allergy.description,
+                image: allergy.image
+
+            })
         }
     }
 
+
     const handleOnChangeImage = async (file: any) => {
-        console.log('[handleOnChangeImage')
     };
     const onFinish = async (values: IAllergy) => {
         props.onSubmit(values)
     }
 
     const handlePreview = async (file: UploadFile) => {
-    //     console.log('[handlePreview')
-    //     let src = file.url as string;
-    //     if (!src) {
-    //         src = await new Promise((resolve) => {
-    //             const reader = new FileReader();
-    //             reader.readAsDataURL(file.originFileObj as RcFile as Blob);
-    //             reader.onload = () => resolve(reader.result as string);
-    //         });
-    //     }
-    //
-    //     const image = new Image();
-    //     image.src = src;
-    //     const imgWindow = window.open(src);
-    //     imgWindow?.document.write(image.outerHTML);
+        console.log(file,'fiel')
+        let src = file.url as string;
+        if (!src) {
+            src = await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file.originFileObj as RcFile as Blob);
+                reader.onload = () => resolve(reader.result as string);
+            });
+        }
+
+        const image = new Image();
+        image.src = src;
+        const imgWindow = window.open(src);
+        imgWindow?.document.write(image.outerHTML);
     };
 
     const onRemove = (_file: UploadFile) => {
@@ -70,7 +86,7 @@ export const AllergyForm = (props: any) => {
 
     return (
         <Card>
-            {handleAllergyForm(
+            { handleAllergyForm(
                 loading,
                 form,
                 edit,
@@ -107,7 +123,7 @@ const handleAllergyForm = (
                         <Form.Item
                             name="image"
                             getValueFromEvent={(e) => {
-                                console.log(e,'event')
+                                console.log(e, 'event')
                                 if (Array.isArray(e)) {
                                     return e;
                                 }
@@ -127,9 +143,9 @@ const handleAllergyForm = (
                                 listType="picture-card"
                                 maxCount={1}
                                 beforeUpload={() => false}
-                                // onPreview={handlePreview}
-                                // onRemove={handleRemove}
-                                // onChange={(file: any) => onChangeImage(file)}
+                                onPreview={handlePreview}
+                                onRemove={handleRemove}
+                                onChange={(file: any) => onChangeImage(file)}
                             >
                                 <div>
                                     <PlusOutlined/>
@@ -198,8 +214,9 @@ const handleAllergyForm = (
                         >
                             <Select placeholder="Select severity">
                                 {
-                                    Object.keys({...severityEnum}).map((value: any,i) => {
-                                        return <Select.Option  key={i} value={value}>{value}</Select.Option>
+                                    Object.keys({...severityEnum}).map((value: any, i) => {
+                                        return <Select.Option key={i}
+                                                              value={severityEnum[value as keyof severityEnum]}>{value}</Select.Option>
                                     })
                                 }
                             </Select>

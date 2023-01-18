@@ -33,6 +33,19 @@ export const createAllergy = async (allergy: IAllergy, file: any): Promise<any> 
     }
 }
 
+export const deleteAllergy = async (id: string): Promise<any> => {
+    try {
+         await AllergySchema.findByIdAndDelete(id).then(value => {
+                cloudinary.uploader.destroy(value.cloudinaryId);
+            }
+        );
+
+        return id;
+    } catch (err) {
+        throw err;
+    }
+}
+
 export const updateAllergy = async (allergy: IAllergy, file: any): Promise<any> => {
     try {
         // Delete image from cloudinary

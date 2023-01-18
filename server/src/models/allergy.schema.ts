@@ -39,12 +39,23 @@ const AllergySchema = new Schema<IAllergy>({
             type: String,
             required: true,
         },
+        symptoms: {
+            type: String,
+            required: true,
+        },
     notes: {
             type:String
     }
     },
     {
-        timestamps: true
+        timestamps: true,
+        id: true,
+        toJSON: {
+            transform(doc, all) {
+                all.id = all._id
+                delete all._id
+            }
+        }
     });
 
 export default model<IAllergy>("Allergy", AllergySchema)
