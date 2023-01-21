@@ -26,7 +26,7 @@ export const Login = () => {
 
     const submitHandler = (formValues: any) => {
         api({
-            url: 'user/login/',
+            url: 'user/login',
             method: 'post',
             payload: formValues
         }).then((value) => {

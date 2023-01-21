@@ -69,7 +69,6 @@ export const generateRefreshToken = async (req, res) => {
             } else {
                 //extract payload from refresh token and generate a new access token and send it
                 const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-                console.log('..payload generated....')
 
                 return {
                     accessToken: jwt.sign({id, name, email}, process.env.ACCESS_TOKEN_SECRET, {
@@ -80,7 +79,7 @@ export const generateRefreshToken = async (req, res) => {
         }
     } catch (error) {
         console.error(error);
-        return res.status(500).json({error: "Internal Server Error!"});
+        throw({error: "Internal Server Error!"});
     }
 };
 

@@ -6,9 +6,9 @@ import {BrowserRouter} from "react-router-dom";
 function App() {
   return (
       <BrowserRouter>
-        <div className="app-container">
-          <AppRoutes/>
-        </div>
+              <div className="app-container">
+                  <AppRoutes/>
+              </div>
       </BrowserRouter>
   );
 }

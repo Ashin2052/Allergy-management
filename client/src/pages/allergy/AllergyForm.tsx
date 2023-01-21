@@ -21,28 +21,35 @@ import {
 } from "@ant-design/icons";
 import {checkIfStringContainsSpaceInStartAndEnd} from "../../shared/utils/shared.utils";
 import {RcFile} from "antd/es/upload";
-import {useEffect, useState} from "react";
+import {forwardRef, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {useAppSelector} from "../../shared/hooks/redux.hooks";
 import {isEmpty} from "../../shared/utils/string";
+import {NewModal} from "../../shared/UI/NewModal";
+import {Footer, Header} from "antd/es/layout/layout";
 
 
-export const AllergyForm = (props: any) => {
+export const AllergyForm = forwardRef((props: any, ref) => {
     const severities = Object.keys(severityEnum);
-    const [fileList, setFileList] = useState<Array<FileList>>([]);
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const practitioners = useAppSelector((store) => store.allergy);
     const [edit, setEdit] = useState(false);
+    const [fileList, setFileList] = useState<any[]>([]);
+    const modalRef = useRef<any>(null);
 
 
-    useEffect(() => {
-        handleEdit();
-    }, []);
-
+    useImperativeHandle(ref, () => ({
+        openModal() {
+            handleEdit();
+            modalRef?.current?.openModal();
+        },
+    }))
     const handleEdit = () => {
         if (props.allergy) {
             let allergy = props.allergy;
-
+            setFileList([
+                {uid: "-1", name: "", status: "done", url: allergy.image},
+            ]);
 
             form.setFieldsValue({
                 name: allergy.name,
@@ -57,18 +64,25 @@ export const AllergyForm = (props: any) => {
 
 
     const handleOnChangeImage = async (file: any) => {
+        // setFileList([
+        //     {
+        //         uid: "",
+        //         name: "",
+        //         status: "done",
+        //         url: imageRes.data.data.imageURL,
+        //     },
+        // ]);
     };
     const onFinish = async (values: IAllergy) => {
         props.onSubmit(values)
     }
 
     const handlePreview = async (file: UploadFile) => {
-        console.log(file,'fiel')
         let src = file.url as string;
         if (!src) {
             src = await new Promise((resolve) => {
                 const reader = new FileReader();
-                reader.readAsDataURL(file.originFileObj as RcFile as Blob);
+                reader.readAsDataURL(file.originFileObj as RcFile);
                 reader.onload = () => resolve(reader.result as string);
             });
         }
@@ -78,27 +92,40 @@ export const AllergyForm = (props: any) => {
         const imgWindow = window.open(src);
         imgWindow?.document.write(image.outerHTML);
     };
-
     const onRemove = (_file: UploadFile) => {
-        // setFileList(fileList.filter((item) => item?.status === "removed"));
+        setFileList(fileList.filter((item) => item?.status === "removed"));
     };
 
 
     return (
-        <Card>
-            { handleAllergyForm(
-                loading,
-                form,
-                edit,
-                onFinish,
-                handleOnChangeImage,
-                handlePreview,
-                fileList,
-                onRemove,
-            )}
-        </Card>
+        <NewModal ref={modalRef}
+        >
+            <Col className={'form-container'}>
+                <Header>
+                    {props.allergy ? 'Edit' : 'Create'} Allergy
+                </Header>
+                {handleAllergyForm(
+                    loading,
+                    form,
+                    edit,
+                    onFinish,
+                    handleOnChangeImage,
+                    handlePreview,
+                    fileList,
+                    onRemove,
+                )}
+                <Footer>
+                    <Button>
+                        {props.allergy ? 'Edit' : 'Save'}
+                    </Button>
+                    <Button >
+                        Cancel
+                    </Button>
+                </Footer>
+            </Col>
+        </NewModal>
     )
-}
+})
 
 
 const handleAllergyForm = (
@@ -112,6 +139,7 @@ const handleAllergyForm = (
         handleRemove: any,
     ) => {
         return (
+
             <Form
                 form={form}
                 name="practitioner-form"
@@ -156,7 +184,6 @@ const handleAllergyForm = (
                     </Col>
                 </Row>
                 <Row
-                    style={{width: "50%"}}
                     gutter={[16, 16]}
                     align="middle"
                     justify="space-between"
@@ -195,7 +222,6 @@ const handleAllergyForm = (
                     </Col>
                 </Row>
                 <Row
-                    style={{width: "50%"}}
                     gutter={[16, 16]}
                     align="middle"
                     justify="space-between"
@@ -239,14 +265,8 @@ const handleAllergyForm = (
                     </Col>
                 </Row>
 
-                <Row>
-                    <Col span={3}>
-                        <Button type="primary" loading={loading} htmlType="submit">
-                            {edit ? "Edit" : "Add"} Practitioner
-                        </Button>
-                    </Col>
-                </Row>
             </Form>
+
         );
     }
 ;

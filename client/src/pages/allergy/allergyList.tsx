@@ -1,8 +1,7 @@
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 
 import {
-    Table,
     Typography,
     Avatar,
     Button,
@@ -15,8 +14,6 @@ import {EyeOutlined, PlusOutlined, DeleteOutlined} from "@ant-design/icons";
 
 import {
     ApiErrorResponse,
-    ApiResponse,
-
 } from "../../types/shared.types";
 import {createAllergy, fetchAllergies, removeAllergy} from "../../shared/reducers/allergyreducer";
 import {useAppDispatch, useAppSelector} from "../../shared/hooks/redux.hooks";
@@ -24,8 +21,7 @@ import {ColumnsType} from "antd/es/table";
 import TableComponent from "../../shared/UI/dataTable";
 import {IAllergy} from "../../types/allergy.types";
 import {AllergyForm} from "./AllergyForm";
-import callApi from "../../shared/api";
-import Editable from "antd/es/typography/Editable";
+import {edit} from "../../services/allergy.service";
 
 const {Title} = Typography;
 
@@ -37,6 +33,7 @@ const AllergyList = () => {
     const [selectEditAllergy, setSelectEditAllergy] = useState();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const tableRrf = useRef<any>();
 
     React.useEffect(() => {
         getAllergies();
@@ -58,9 +55,10 @@ const AllergyList = () => {
         }
     };
 
-    const onEdit = (value: any) => {
-        setSelectEditAllergy(value);
-        setShowCartForm(true);
+    const onEdit = async (value: any) => {
+        await setSelectEditAllergy(value);
+        tableRrf?.current?.openModal()
+        // setShowCartForm(true);
     }
 
     const handleDelete = async (id: string) => {
@@ -132,7 +130,7 @@ const AllergyList = () => {
                             style={{marginLeft: "20px"}}
                             type="primary"
                             icon={<EyeOutlined/>}
-                            onClick={() =>onEdit(value)}
+                            onClick={() => onEdit(value)}
 
                         >
                             Edit
@@ -176,14 +174,15 @@ const AllergyList = () => {
                         type="primary"
                         style={{width: "100%"}}
                         icon={<PlusOutlined/>}
-                        onClick={showHideFormHandler}
+                        onClick={() => tableRrf?.current?.openModal()}
                     >
                         Register Allergy
                     </Button>
                 </Col>
             </Row>
-            {showCartForm && <AllergyForm allergy={selectEditAllergy} onSubmit={onsubmitForm}/>}
-
+            <AllergyForm allergy={selectEditAllergy}
+                         ref={tableRrf}
+                         onSubmit={onsubmitForm}/>
             <TableComponent
                 columns={practitionerColumn} dataSource={allergy.data.allergies}/>
         </div>

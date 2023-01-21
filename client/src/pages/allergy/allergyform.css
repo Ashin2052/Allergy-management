@@ -1,6 +1,8 @@
  .form-container {
      display: flex;
-     justify-content: center;
-     align-content: center;
+     text-align: center;
+     justify-content: space-around;
+     padding: 8px;
+
 
  }
