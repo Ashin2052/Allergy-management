@@ -1,5 +1,3 @@
-import {Field, Formik, FormikHelpers, FormikValues} from "formik";
-import * as Yup from 'yup';
 import {IAllergy, severityEnum} from "../../types/allergy.types";
 import {
     Button,
@@ -19,20 +17,16 @@ import {
     UserOutlined,
     PlusOutlined,
 } from "@ant-design/icons";
-import {checkIfStringContainsSpaceInStartAndEnd} from "../../shared/utils/shared.utils";
 import {RcFile} from "antd/es/upload";
 import {forwardRef, useEffect, useImperativeHandle, useRef, useState} from "react";
-import {useAppSelector} from "../../shared/hooks/redux.hooks";
-import {isEmpty} from "../../shared/utils/string";
 import {NewModal} from "../../shared/UI/NewModal";
 import {Footer, Header} from "antd/es/layout/layout";
+import '../../../../client/src/App.css'
 
 
 export const AllergyForm = forwardRef((props: any, ref) => {
-    const severities = Object.keys(severityEnum);
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
-    const practitioners = useAppSelector((store) => store.allergy);
     const [edit, setEdit] = useState(false);
     const [fileList, setFileList] = useState<any[]>([]);
     const modalRef = useRef<any>(null);
@@ -42,6 +36,9 @@ export const AllergyForm = forwardRef((props: any, ref) => {
         openModal() {
             handleEdit();
             modalRef?.current?.openModal();
+        },
+        closeModal() {
+            modalRef?.current?.closeModal();
         },
     }))
     const handleEdit = () => {
@@ -57,24 +54,20 @@ export const AllergyForm = forwardRef((props: any, ref) => {
                 symptoms: allergy.symptoms,
                 description: allergy.description,
                 image: allergy.image
-
             })
         }
     }
-
+    const afterCLose = () => {
+        form.resetFields();
+        props.afterClose()
+    }
 
     const handleOnChangeImage = async (file: any) => {
-        // setFileList([
-        //     {
-        //         uid: "",
-        //         name: "",
-        //         status: "done",
-        //         url: imageRes.data.data.imageURL,
-        //     },
-        // ]);
+
     };
     const onFinish = async (values: IAllergy) => {
-        props.onSubmit(values)
+        values.id =  props.allergy?.id
+        props.onSubmit(values);
     }
 
     const handlePreview = async (file: UploadFile) => {
@@ -96,9 +89,15 @@ export const AllergyForm = forwardRef((props: any, ref) => {
         setFileList(fileList.filter((item) => item?.status === "removed"));
     };
 
+    const onCancel = () => {
+        modalRef?.current?.closeModal();
+
+    }
+
 
     return (
         <NewModal ref={modalRef}
+                  afterCLose={afterCLose}
         >
             <Col className={'form-container'}>
                 <Header>
@@ -113,15 +112,8 @@ export const AllergyForm = forwardRef((props: any, ref) => {
                     handlePreview,
                     fileList,
                     onRemove,
+                    onCancel
                 )}
-                <Footer>
-                    <Button>
-                        {props.allergy ? 'Edit' : 'Save'}
-                    </Button>
-                    <Button >
-                        Cancel
-                    </Button>
-                </Footer>
             </Col>
         </NewModal>
     )
@@ -137,9 +129,9 @@ const handleAllergyForm = (
         handlePreview: any,
         fileList: any,
         handleRemove: any,
+        onCancel:any
     ) => {
         return (
-
             <Form
                 form={form}
                 name="practitioner-form"
@@ -151,7 +143,6 @@ const handleAllergyForm = (
                         <Form.Item
                             name="image"
                             getValueFromEvent={(e) => {
-                                console.log(e, 'event')
                                 if (Array.isArray(e)) {
                                     return e;
                                 }
@@ -264,7 +255,15 @@ const handleAllergyForm = (
                         </Form.Item>
                     </Col>
                 </Row>
+                <Row>
+                    <Button className={'mr-16'} htmlType="submit">
+                        Save
+                    </Button>
+                    <Button htmlType="reset" onClick={onCancel}>
+                        Cancel
 
+                    </Button>
+                </Row>
             </Form>
 
         );

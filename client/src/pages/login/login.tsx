@@ -1,30 +1,20 @@
-import {Formik, Form, Field, ErrorMessage} from "formik";
-import * as Yup from "yup";
-import React from "react";
+import React, {useState} from "react";
 import "./Login.css";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import api from "../../shared/api";
 import {login} from "../../shared/reducers/authreducer";
+import {Input} from "antd/lib";
+import {Button, Checkbox, Form} from "antd";
 
-const initialValues = {
-    email: "",
-    password: "",
-};
-
-const LoginSchemaValidation = Yup.object().shape({
-    email: Yup.string().email().required("Email is required"),
-
-    password: Yup.string().required("Password is required"),
-});
 
 export const Login = () => {
 
     const navigate = useNavigate();
-
+    const [err, setErr] = useState();
     const dispatch = useDispatch();
 
-    const submitHandler = (formValues: any) => {
+    const onFinish = (formValues: any) => {
         api({
             url: 'user/login',
             method: 'post',
@@ -33,74 +23,59 @@ export const Login = () => {
             dispatch(login(value));
             navigate('/home')
         }).catch((err) => {
+            setErr(err?.msg);
             console.log(err)
         })
     };
 
+
     return (
-        <Formik
-            initialValues={initialValues}
-            validationSchema={LoginSchemaValidation}
-            onSubmit={submitHandler}
-        >
-            {(formik) => {
-                const {errors, touched, isValid, dirty} = formik;
-                return (
-                    <div className="form-container">
-                        <div className="form-wrapper">
-                            <h1>Login in to continue</h1>
-                            <div className="new-form">
-                                <Form>
-                                    <div className="form-row">
-                                        <label htmlFor="email">Email</label>
-                                        <Field
-                                            type="email"
-                                            name="email"
-                                            id="email"
-                                            className={
-                                                errors.email && touched.email ? "input-error" : null
-                                            }
-                                        />
-                                        <ErrorMessage
-                                            name="email"
-                                            component="span"
-                                            className="error"
-                                        />
-                                    </div>
+        <div className="login-form-container">
 
-                                    <div className="form-row">
-                                        <label htmlFor="password">Password</label>
-                                        <Field
-                                            type="password"
-                                            name="password"
-                                            id="password"
-                                            className={
-                                                errors.password && touched.password
-                                                    ? "input-error"
-                                                    : null
-                                            }
-                                        />
-                                        <ErrorMessage
-                                            name="password"
-                                            component="span"
-                                            className="error"
-                                        />
-                                    </div>
+            <span>
+                <h1>Login in to continue</h1>
+            </span>
+            <Form name="basic"
+                  labelCol={{span: 8}}
+                  wrapperCol={{span: 16}}
+                  style={{maxWidth: 600}}
+                  initialValues={{remember: true}}
+                  onFinish={onFinish}
+                  autoComplete="off"
+            >
 
-                                    <button
-                                        type="submit"
-                                        className={!(dirty && isValid) ? "disabled-btn" : ""}
-                                        disabled={!(dirty && isValid)}
-                                    >
-                                        Sign In
-                                    </button>
-                                </Form>
-                                <span>or</span>
-                            </div>
-                        </div>
-                    </div>
-                );
-            }}
-        </Formik>
+                <div className="form-row">
+                    <Form.Item
+                        label="email"
+                        name="email"
+                        rules={[{required: true, message: 'Please input your username!'}]}
+                    >
+                        <Input/>
+                    </Form.Item>
+                </div>
+
+                <div className="form-row">
+
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        rules={[{required: true, message: 'Please input your password!'}]}
+                    >
+                        <Input.Password/>
+                    </Form.Item>
+                </div>
+
+                <Form.Item name="remember" valuePropName="checked" wrapperCol={{offset: 8, span: 16}}>
+                    <Checkbox>Remember me</Checkbox>
+                </Form.Item>
+
+                <Form.Item wrapperCol={{offset: 8, span: 16}}>
+                    <Button type="primary" htmlType="submit">
+                        Submit
+                    </Button>
+                </Form.Item>
+            </Form>
+
+        </div>
     );
 }

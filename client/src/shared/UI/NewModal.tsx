@@ -24,19 +24,18 @@ export const NewModal = forwardRef((props: any, ref) => {
         useImperativeHandle(ref, () => ({
             openModal() {
                 setIsOpen(true);
+            },
+            closeModal() {
+                setIsOpen(false);
             }
         }))
 
 
-        function afterOpenModal() {
-            // references are now sync'd and can be accessed.
-            // subtitle.style.color = '#f00';
-        }
+        function afterOpenModal() {}
 
         function closeModal() {
             setIsOpen(false);
-            props.afterClose()
-
+            props.afterCLose();
         }
 
         return (

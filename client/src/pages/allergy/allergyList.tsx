@@ -15,13 +15,12 @@ import {EyeOutlined, PlusOutlined, DeleteOutlined} from "@ant-design/icons";
 import {
     ApiErrorResponse,
 } from "../../types/shared.types";
-import {createAllergy, fetchAllergies, removeAllergy} from "../../shared/reducers/allergyreducer";
+import {createAllergy, editAllergy, fetchAllergies, removeAllergy} from "../../shared/reducers/allergyreducer";
 import {useAppDispatch, useAppSelector} from "../../shared/hooks/redux.hooks";
 import {ColumnsType} from "antd/es/table";
 import TableComponent from "../../shared/UI/dataTable";
 import {IAllergy} from "../../types/allergy.types";
 import {AllergyForm} from "./AllergyForm";
-import {edit} from "../../services/allergy.service";
 
 const {Title} = Typography;
 
@@ -30,13 +29,14 @@ const AllergyList = () => {
 
     const allergy = useAppSelector((state) => state.allergy);
     const [showCartForm, setShowCartForm] = useState(false);
-    const [selectEditAllergy, setSelectEditAllergy] = useState();
+    const [selectEditAllergy, setSelectEditAllergy] = useState<any>();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const tableRrf = useRef<any>();
 
     React.useEffect(() => {
-        getAllergies();
+        getAllergies().then(r => {
+        });
     }, []);
 
     const showHideFormHandler = () => {
@@ -58,12 +58,12 @@ const AllergyList = () => {
     const onEdit = async (value: any) => {
         await setSelectEditAllergy(value);
         tableRrf?.current?.openModal()
-        // setShowCartForm(true);
     }
 
     const handleDelete = async (id: string) => {
         try {
-            await dispatch(removeAllergy(id));
+            dispatch(removeAllergy(id));
+            getAllergies();
         } catch (error) {
             return;
         }
@@ -143,16 +143,23 @@ const AllergyList = () => {
 
     const onsubmitForm = async (values: IAllergy) => {
         try {
+            tableRrf.current.closeModal();
             const formData = new FormData();
             formData.append('name', values.name);
-            formData.append('image', values.image[0].originFileObj);
+            if (values.image[0]) {
+                formData.append('image', values.image[0].originFileObj);
+            }
             formData.append('severity', values.severity);
             formData.append('symptoms', values.symptoms);
             formData.append('description', values.description);
-            await dispatch(createAllergy(formData));
+            if (values?.id) {
+                await dispatch(editAllergy({formData, id: values.id}))
+            } else {
+                await dispatch(createAllergy(formData));
+            }
             getAllergies().then(r => {
             })
-            setShowCartForm(false)
+
         } catch (err) {
 
         }
@@ -181,6 +188,9 @@ const AllergyList = () => {
                 </Col>
             </Row>
             <AllergyForm allergy={selectEditAllergy}
+                         afterClose={() => {
+                             setSelectEditAllergy(null)
+                         }}
                          ref={tableRrf}
                          onSubmit={onsubmitForm}/>
             <TableComponent

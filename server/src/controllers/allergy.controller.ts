@@ -28,8 +28,8 @@ router.delete('/:id', upload.single('image'), auth, async (req, res, next) => {
         .catch(err => next(err));
 });
 
-router.put('/', upload.single('image'), auth, async (req, res, next) => {
-    allergyService.updateAllergy(req.body as IAllergy, req.file)
+router.put('/:id', upload.single('image'), auth, async (req, res, next) => {
+    allergyService.updateAllergy(req.body as IAllergy,req.params.id, req.file)
         .then(data => res.json(data))
         .catch(err => next(err));
 });

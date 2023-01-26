@@ -56,9 +56,7 @@ export const editAllergy = createAsyncThunk(
     "allergies/editAllergy",
     async (data: any, {rejectWithValue}) => {
         try {
-            const {id, ...payload} = data;
-
-            return await edit(id, payload);
+            return await edit(data.formData,data.id);
         } catch (err) {
             return rejectWithValue(err);
         }

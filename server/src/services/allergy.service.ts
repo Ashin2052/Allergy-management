@@ -46,18 +46,24 @@ export const deleteAllergy = async (id: string): Promise<any> => {
     }
 }
 
-export const updateAllergy = async (allergy: IAllergy, file: any): Promise<any> => {
+export const updateAllergy = async (allergy: IAllergy,id:string, file: any): Promise<any> => {
     try {
+
+        const oldAllergy = await AllergySchema.findById(id).lean();
         // Delete image from cloudinary
         if (file) {
-            await cloudinary.uploader.destroy(allergy.cloudinaryId);
+            await cloudinary.uploader.destroy(oldAllergy?.cloudinaryId);
             // Upload image to cloudinary
             const result = await cloudinary.uploader.upload(file.path);
             allergy.cloudinaryId = result.public_id;
             allergy.image = result.secure_url;
         }
+        else {
+            allergy.cloudinaryId = oldAllergy.cloudinaryId;
+            allergy.image = oldAllergy.secure_url;
 
-        return await AllergySchema.findByIdAndUpdate(allergy.id, allergy, {
+        }
+        return  AllergySchema.findByIdAndUpdate(id, allergy, {
             new: true
         });
     } catch (err) {

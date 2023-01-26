@@ -1,19 +1,16 @@
-import axios, {AxiosHeaders} from 'axios';
+import axios, {AxiosHeaders} from "axios";
+import callApi from "./api";
 
-const baseUrl = process.env.REACT_APP_API_ENDPOINT;
-export const callApi = (data: IAxios, multipart = false) => {
-    return axios({
-        data: data.payload,
-        method: data.method,
-        url: `${baseUrl}/api/${data.url}/${data.reqParams ? data.reqParams : ''}`,
-        headers: {
-            "Content-Type": multipart
-                ? `multipart/form-data` : "application/json"
-        },
-    });
-};
 
-axios.interceptors.request.use(
+const axiosINstanse = axios.create();
+
+export const callApi2 = () => {
+
+return axiosINstanse.get('https://localhost:8080/api/');
+}
+
+
+axiosINstanse.interceptors.request.use(
     (config) => {
         const accessToken = localStorage.getItem("accessToken");
         if (accessToken) {
@@ -29,7 +26,7 @@ axios.interceptors.request.use(
 );
 
 //response interceptor to refresh token on receiving token expired error
-axios.interceptors.response.use(
+axiosINstanse.interceptors.response.use(
     (response) => {
         return response.data;
     },
@@ -43,13 +40,13 @@ axios.interceptors.response.use(
             !originalRequest._retry
         ) {
             originalRequest._retry = true;
-            return callApi({
+            return callApi2({
                 method: "post",
                 url: 'user/refresh_token',
                 payload: {refreshToken}
             }).then((res: any) => {
                 localStorage.setItem("accessToken", res.accessToken);
-                return axios(originalRequest);
+                return axiosINstanse(originalRequest);
 
             }).catch((Err) => {
                 window.location.href = '/login';
@@ -61,12 +58,3 @@ axios.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-
-export interface IAxios {
-    method: 'get' | 'post' | 'put' | 'delete',
-    payload?: any,
-    url: string;
-    reqParams?: string
-}
-
-export default callApi;

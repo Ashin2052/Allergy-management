@@ -17,10 +17,11 @@ export const create = (payload: object | undefined | void) => {
     }, true)
 };
 
-export const edit = (id: number, payload: object | undefined | void) => {
+export const edit = (payload: object | undefined | void, id: string) => {
     return callApi({
-        url: 'allergy',
-        method: 'put'
+        url: `allergy/${id}`,
+        method: 'put',
+        payload,
     }, true)
 };
 

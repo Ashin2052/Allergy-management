@@ -2,6 +2,8 @@ import express, { Request, Response, Application } from 'express';
 import bodyParser from 'body-parser';
 import routerManager from './src/routes';
 import connect from './connect';
+import swaggerUi from 'swagger-ui-express';
+
 import {errorHandler} from "./src/utils/errorhandler";
 import cors from 'cors';
 const mongoose = require("mongoose");
@@ -20,4 +22,6 @@ connect({db: process.env.MONGODB_URI});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded\
 app.use('/api', routerManager);
+app.use('/documentation', swaggerUi.serve, swaggerUi.setup(apiDocumentation));
+
 app.use(errorHandler);
