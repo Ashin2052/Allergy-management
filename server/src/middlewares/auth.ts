@@ -1,5 +1,11 @@
 const jwt = require("jsonwebtoken");
 
+/**
+ * Authentication middleware
+ * @param {object} req
+ * @param {object} req
+ * @param {object} next
+ */
 const verifyToken = (req, res, next) => {
     const token =
         req.body.token || req.query.token || req.headers["x-access-token"];

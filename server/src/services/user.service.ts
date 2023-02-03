@@ -33,8 +33,9 @@ export const login = async (req) => {
         });
 
         const match = await bcrypt.compare(req.body.password, user.password);
+
         if (!match) {
-            throw new Error("Wrong Password");
+            throw({message:'Password does not match'});
         }
         const {id, name, email} = user;
         const accessToken = jwt.sign({id, name, email}, process.env.ACCESS_TOKEN_SECRET, {
@@ -47,7 +48,7 @@ export const login = async (req) => {
         await UserSchema.findByIdAndUpdate(id, {refreshToken: refreshToken});
         return ({accessToken, refreshToken, id, name, email});
     } catch (error) {
-        throw ({msg: error.message ? error.message : "Email not found"});
+        throw ({message: error.message ? error.message : "Email not found"});
     }
 }
 
@@ -78,7 +79,6 @@ export const generateRefreshToken = async (req, res) => {
             }
         }
     } catch (error) {
-        console.error(error);
         throw({error: "Internal Server Error!"});
     }
 };

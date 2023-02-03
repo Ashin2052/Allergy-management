@@ -3,7 +3,10 @@ import {Ipagination} from "../types/shared.types";
 
 const cloudinary = require("../configs/cloudinary.config");
 
-
+/**
+ * Get allergies
+ * @param {object} pagination
+ */
 export const getAllergies = async (pagination?: Ipagination): Promise<any> => {
     try {
         const allergies = await AllergySchema.find()
@@ -22,6 +25,11 @@ export const getAllergies = async (pagination?: Ipagination): Promise<any> => {
     }
 }
 
+/**
+ * Register allergy
+ * @param {object} allergy
+ * @param {object} file
+ */
 export const createAllergy = async (allergy: IAllergy, file: any): Promise<any> => {
     try {
         const result = await cloudinary.uploader.upload(file.path);
@@ -33,6 +41,11 @@ export const createAllergy = async (allergy: IAllergy, file: any): Promise<any> 
     }
 }
 
+/**
+ * Register allergy
+ * @param {string} id
+ * @return {promise}
+ */
 export const deleteAllergy = async (id: string): Promise<any> => {
     try {
          await AllergySchema.findByIdAndDelete(id).then(value => {
@@ -46,10 +59,18 @@ export const deleteAllergy = async (id: string): Promise<any> => {
     }
 }
 
+
+/**
+ * Update allergy
+ * @param {object} allergy
+ * @param {string} id
+ * @param {object} file
+ * @return {promise}
+ */
 export const updateAllergy = async (allergy: IAllergy,id:string, file: any): Promise<any> => {
     try {
 
-        const oldAllergy = await AllergySchema.findById(id).lean();
+        const oldAllergy:any = await AllergySchema.findById(id).lean();
         // Delete image from cloudinary
         if (file) {
             await cloudinary.uploader.destroy(oldAllergy?.cloudinaryId);
