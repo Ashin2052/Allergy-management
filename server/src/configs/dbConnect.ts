@@ -4,7 +4,7 @@ import logger from "./logger";
 type TInput = {
     db: string;
 }
-export default ({db}: TInput) => {
+export const dbConnect = ({db}: TInput) => {
     const connect = () => {
         mongoose.set({strictQuery: false})
         mongoose.connect(db)
@@ -18,6 +18,11 @@ export default ({db}: TInput) => {
             })
     };
     connect();
-
     mongoose.connection.on('disconnected', connect);
 };
+
+export const close = () => {
+    mongoose.connection.close().then(() => {
+        logger.info(`Successfully disconnected`);
+    });
+}

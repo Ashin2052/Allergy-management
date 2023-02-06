@@ -1,13 +1,12 @@
 module.exports = {
     preset: 'ts-jest',
     testEnvironment: 'node',
-    // testPathIgnorePatterns: ['tests/integration', 'build'],
-    modulePathIgnorePatterns: ['<rootDir>/src/tests/integration', '<rootDir>/dist'],
-    testEnvironmentOptions: {
-        NODE_ENV: 'DEV',
-        APP_ENV: 'DEV',
+    testMatch: [
+        "**/__tests__/**/*.+(ts|tsx|js)",
+        "**/?(*.)+(spec|test).+(ts|tsx|js)"
+    ],
+    "transform": {
+        "^.+\\.(ts|tsx)$": "ts-jest"
     },
-    restoreMocks: true,
-    coveragePathIgnorePatterns: ['node_modules', 'src/config', 'src/app.ts', 'tests'],
-    coverageReporters: ['text', 'lcov', 'clover', 'html'],
-}
+    setupFilesAfterEnv: ['./jest.setup.js']
+};
