@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import logger from "./logger";
 
 type TInput = {
     db: string;
@@ -8,10 +9,11 @@ export default ({db}: TInput) => {
         mongoose.set({strictQuery: false})
         mongoose.connect(db)
             .then(() => {
-                return console.info(`Successfully connected to database`);
+                logger.info(`Successfully connected to database`);
+                return;
             })
             .catch((error) => {
-                console.error('Error connecting to database: ', error);
+                logger.error('Error connecting to database: ', error.toString());
                 return process.exit(1);
             })
     };

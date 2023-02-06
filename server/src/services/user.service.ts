@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import UserSchema from "../models/user.schema";
 import jwt from 'jsonwebtoken';
+import logger from "../configs/logger";
 
 export const register = async (req) => {
     const {email, password, confPassword} = req.body;
@@ -20,9 +21,8 @@ export const register = async (req) => {
             ...req.body,
             password: hashPassword,
         });
-
     } catch (error) {
-        console.log(error);
+        logger.error(`${email} register error : ${error.toString()}`);
     }
 }
 
@@ -35,7 +35,7 @@ export const login = async (req) => {
         const match = await bcrypt.compare(req.body.password, user.password);
 
         if (!match) {
-            throw({message:'Password does not match'});
+            throw({message: 'Password does not match'});
         }
         const {id, name, email} = user;
         const accessToken = jwt.sign({id, name, email}, process.env.ACCESS_TOKEN_SECRET, {

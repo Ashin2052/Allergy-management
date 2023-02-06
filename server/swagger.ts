@@ -1,21 +1,19 @@
-import * as path from "path";
-
 export const options = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "LogRocket Express API with Swagger",
+            title: "Allergy management ",
             version: "0.1.0",
             description:
-                "This is a simple CRUD API application made with Express and documented with Swagger",
+                "This is a simple allergy management application made with Express and documented with Swagger",
             license: {
                 name: "MIT",
                 url: "https://spdx.org/licenses/MIT.html",
             },
             contact: {
-                name: "LogRocket",
-                url: "https://logrocket.com",
-                email: "info@email.com",
+                name: "Leapfrog",
+                url: "https://lftechnology.com",
+                email: "lftechnology@gmail.com",
             },
         },
         servers: [

@@ -59,7 +59,6 @@ const router = Router();
  *         content:
  *           application/json:
  *              schema:
- * /allergy:
  *   post:
  *     summary: Create a new user
  *     tags: [Users]
