@@ -1,8 +1,8 @@
-import {createAsyncThunk, createSlice, Draft, PayloadAction,} from "@reduxjs/toolkit";
-import {ApiErrorResponse,} from "../../types/shared.types";
+import {createAsyncThunk, createSlice, Draft, PayloadAction,} from '@reduxjs/toolkit';
+import {ApiErrorResponse,} from '../../types/shared.types';
 
-import {create, edit, fetchAll, remove,} from "../../services/allergy.service";
-import {IAllergy} from "../../types/allergy.types";
+import {create, edit, fetchAll, remove,} from '../../services/allergy.service';
+import {IAllergy} from '../../types/allergy.types';
 
 interface IallergiesState {
     data: any;
@@ -23,15 +23,15 @@ const initialState: IallergiesState = {
     isEditing: false,
     error: {
         data: {
-            info: "",
+            info: '',
         },
-        message: "",
+        message: '',
         status: 500,
     },
 };
 
 export const fetchAllergies = createAsyncThunk(
-    "allergies/fetchAllAllergies",
+    'allergies/fetchAllAllergies',
     async (_, {rejectWithValue}) => {
         try {
             return await fetchAll();
@@ -42,7 +42,7 @@ export const fetchAllergies = createAsyncThunk(
 );
 
 export const createAllergy = createAsyncThunk(
-    "allergies/createAllergy",
+    'allergies/createAllergy',
     async (payload: FormData, {rejectWithValue}) => {
         try {
             return await create(payload);
@@ -53,7 +53,7 @@ export const createAllergy = createAsyncThunk(
 );
 
 export const editAllergy = createAsyncThunk(
-    "allergies/editAllergy",
+    'allergies/editAllergy',
     async (data: any, {rejectWithValue}) => {
         try {
             return await edit(data.formData, data.id);
@@ -64,7 +64,7 @@ export const editAllergy = createAsyncThunk(
 );
 
 export const removeAllergy = createAsyncThunk(
-    "allergies/removeAllergy",
+    'allergies/removeAllergy',
     async (id: string, {rejectWithValue}) => {
         try {
             return await remove(id);
@@ -75,7 +75,7 @@ export const removeAllergy = createAsyncThunk(
 );
 
 const allergieslice = createSlice({
-    name: "Allergy",
+    name: 'Allergy',
     initialState,
 
     reducers: {

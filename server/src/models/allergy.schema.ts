@@ -58,4 +58,4 @@ const AllergySchema = new Schema<IAllergy>({
         }
     });
 
-export default model<IAllergy>("Allergy", AllergySchema)
+export default model<IAllergy>('Allergy', AllergySchema)

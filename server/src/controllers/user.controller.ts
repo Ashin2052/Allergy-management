@@ -1,6 +1,6 @@
 import * as userService from '../services/user.service'
-import {Router} from "express";
-const upload = require("../middlewares/multer");
+import {Router} from 'express';
+const upload = require('../middlewares/multer');
 
 const router = Router();
 
@@ -97,7 +97,7 @@ const router = Router();
  *         description: Some server error
  */
 
-router.post('/register', async (req, res, next) => {
+router.post('/register',async (req, res, next) => {
     userService.register(req)
         .then(data => res.json(data))
         .catch(err => next(err));

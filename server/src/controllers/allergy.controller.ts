@@ -1,10 +1,10 @@
-import * as allergyService from '../../services/allergy.service'
-import {IAllergy} from "../../models/allergy.schema";
-import {Router} from "express";
-import {Ipagination} from "../../types/shared.types";
+import * as allergyService from '../services/allergy.service'
+import {IAllergy} from '../models/allergy.schema';
+import {Router} from 'express';
+import {Ipagination} from '../types/shared.types';
 
-const auth = require("../../middlewares/auth");
-const upload = require("../../middlewares/multer");
+const auth = require('../middlewares/auth');
+const upload = require('../middlewares/multer');
 
 const router = Router();
 

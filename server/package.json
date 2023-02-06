@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "export NODE_ENV=dev; tsc -w & nodemon -q -w src/dist src/dist/index.js",
-    "test": "export NODE_ENV=test; jest",
-    "test:watch": "export NODE_ENV=test; jest --watchAll",
-    "swagger-autogen": "node swagger.ts"
+    "test": "export NODE_ENV=test; tsc -w & jest --testTimeout=5000",
+    "test:watch": "cexport NODE_ENV=test; tsc -w &  jest  --testTimeout=5000 --watchAll",
+    "swagger-autogen": "node swagger.ts",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,7 @@
     "body-parser": "^1.20.1",
     "cloudinary": "^1.33.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-jsdoc-swagger": "^1.8.0",

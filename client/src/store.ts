@@ -1,7 +1,7 @@
 // app/store.js
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from './shared/reducers/authreducer'
-import allergyreducer from "./shared/reducers/allergyreducer";
+import allergyreducer from './shared/reducers/allergyreducer';
 
 const store = configureStore({
     reducer: {

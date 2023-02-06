@@ -1,7 +1,7 @@
-import AllergySchema, {IAllergy} from "../models/allergy.schema";
-import {Ipagination} from "../types/shared.types";
+import AllergySchema, {IAllergy} from '../models/allergy.schema';
+import {Ipagination} from '../types/shared.types';
 
-const cloudinary = require("../configs/cloudinary.config");
+const cloudinary = require('../configs/cloudinary.config');
 
 /**
  * Get allergies

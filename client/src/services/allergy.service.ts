@@ -1,6 +1,4 @@
-import axios from "axios";
-import {BaseType} from "typescript";
-import callApi from "../shared/api";
+import callApi from '../shared/api';
 
 export const fetchAll = () => {
     return callApi({
@@ -28,7 +26,7 @@ export const edit = (payload: object | undefined | void, id: string) => {
 export const remove = (reqParams: string) => {
     return callApi({
         url: 'allergy',
-        method: "delete",
+        method: 'delete',
         reqParams,
     })
 };

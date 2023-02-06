@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
-import logger from "./logger";
+import logger from './logger';
 
 type TInput = {
     db: string;
 }
+
 export const dbConnect = ({db}: TInput) => {
     const connect = () => {
         mongoose.set({strictQuery: false})

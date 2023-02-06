@@ -1,20 +1,20 @@
-import {applicationConfig} from "../src/configs/config";
-import {close, dbConnect} from "../src/configs/dbConnect";
-import AllergySchema from "../src/models/allergy.schema";
-import {allergyFixtures} from "../src/test/fixtures/allergy.fixtures";
+import {applicationConfig} from '../src/configs/config';
+import {close, dbConnect} from '../src/configs/dbConnect';
+import AllergySchema from '../src/models/allergy.schema';
+import {allergyFixtures} from './fixtures/allergy.fixtures';
 
-describe("Users", () => {
+describe('Users', () => {
     beforeAll(() => {
         dbConnect({db: applicationConfig.MONGODB_URI});
     });
 
     afterAll(() => {
-        return close();
+        close();
     });
 
     // Creation
-    describe("User Creation", () => {
-        it("Should add a new allergy", async () => {
+    describe('Allergy Creation', () => {
+        it('Should add a new allergy', async () => {
             const createdAllergy = await AllergySchema.create(allergyFixtures);
             expect(createdAllergy.name).toEqual('covid');
         });

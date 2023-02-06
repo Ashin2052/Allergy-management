@@ -1,7 +1,7 @@
-import bcrypt from "bcrypt";
-import UserSchema from "../models/user.schema";
+import bcrypt from 'bcrypt';
+import UserSchema from '../models/user.schema';
 import jwt from 'jsonwebtoken';
-import logger from "../configs/logger";
+import logger from '../configs/logger';
 
 export const register = async (req) => {
     const {email, password, confPassword} = req.body;
@@ -9,10 +9,10 @@ export const register = async (req) => {
         email: req.body.email
     });
     if (user?.email === email) {
-        throw  new Error("User already exists");
+        throw  new Error('User already exists');
     }
     if (password !== confPassword) {
-        throw  new Error("Password and Confirm Password do not match");
+        throw  new Error('Password and Confirm Password do not match');
     }
     const salt = await bcrypt.genSalt();
     const hashPassword = await bcrypt.hash(password, salt);
@@ -48,7 +48,7 @@ export const login = async (req) => {
         await UserSchema.findByIdAndUpdate(id, {refreshToken: refreshToken});
         return ({accessToken, refreshToken, id, name, email});
     } catch (error) {
-        throw ({message: error.message ? error.message : "Email not found"});
+        throw ({message: error.message ? error.message : 'Email not found'});
     }
 }
 
@@ -58,7 +58,7 @@ export const generateRefreshToken = async (req, res) => {
         const oldRefreshToken = req.body.refreshToken;
         //send error if no refreshToken is sent
         if (!oldRefreshToken) {
-            return res.status(403).json({error: "Access denied,token missing!"});
+            return res.status(403).json({error: 'Access denied,token missing!'});
         } else {
             //query for the token to check if it is valid:
             const user = await UserSchema.findOne({refreshToken: oldRefreshToken});
@@ -66,7 +66,7 @@ export const generateRefreshToken = async (req, res) => {
 
             //send error if no token found:
             if (!user) {
-                return res.status(401).json({error: "Token expired!"});
+                return res.status(401).json({error: 'Token expired!'});
             } else {
                 //extract payload from refresh token and generate a new access token and send it
                 const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
@@ -79,7 +79,7 @@ export const generateRefreshToken = async (req, res) => {
             }
         }
     } catch (error) {
-        throw({error: "Internal Server Error!"});
+        throw({error: 'Internal Server Error!'});
     }
 };
 

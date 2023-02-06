@@ -1,4 +1,4 @@
-import {IAllergy, severityEnum} from "../../models/allergy.schema";
+import {IAllergy, severityEnum} from '../../src/models/allergy.schema';
 import {faker} from '@faker-js/faker';
 
 export const allergyFixtures: IAllergy = {

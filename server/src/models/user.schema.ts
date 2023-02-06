@@ -6,7 +6,8 @@ export interface IUser {
     email: string,
     password: string,
     role: ROlE,
-    refreshToken?: string
+    refreshToken?: string,
+    confPassword?:string,
 }
 
 
@@ -45,4 +46,4 @@ const UserSchema = new Schema<IUser>({
         }
     });
 
-export default model<IUser>("User", UserSchema)
+export default model<IUser>('User', UserSchema)
