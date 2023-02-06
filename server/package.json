@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "export NODE_ENV=test; tsc -w & nodemon -q -w src/dist src/dist/index.js",
+    "dev": "export NODE_ENV=dev; tsc -w & nodemon -q -w src/dist src/dist/index.js",
     "test": "export NODE_ENV=test; jest",
     "test:watch": "export NODE_ENV=test; jest --watchAll",
     "swagger-autogen": "node swagger.ts"

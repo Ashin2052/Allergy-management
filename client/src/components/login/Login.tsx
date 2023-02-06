@@ -11,7 +11,6 @@ import {Button, Checkbox, Form} from "antd";
 export const Login = () => {
 
     const navigate = useNavigate();
-    const [err, setErr] = useState();
     const dispatch = useDispatch();
 
     const onFinish = (formValues: any) => {
@@ -23,7 +22,6 @@ export const Login = () => {
             dispatch(login(value));
             navigate('/home')
         }).catch((err) => {
-            setErr(err?.msg);
             console.log(err)
         })
     };
@@ -31,7 +29,6 @@ export const Login = () => {
 
     return (
         <div className="login-form-container">
-
             <span>
                 <h1>Login in to continue</h1>
             </span>

@@ -1,16 +1,11 @@
 import {IAllergy, severityEnum} from "../../types/allergy.types";
 import {
     Button,
-    Card,
-    Checkbox,
     Col,
-    DatePicker,
     Form,
     Input,
     Row,
-    TimePicker,
     Upload,
-    notification,
     UploadFile, Select,
 } from "antd";
 import {
@@ -18,11 +13,11 @@ import {
     PlusOutlined,
 } from "@ant-design/icons";
 import {RcFile} from "antd/es/upload";
-import {forwardRef, useEffect, useImperativeHandle, useRef, useState} from "react";
-import {NewModal} from "../../shared/UI/NewModal";
-import {Footer, Header} from "antd/es/layout/layout";
+import {forwardRef, useImperativeHandle, useRef, useState} from "react";
+import {Header} from "antd/es/layout/layout";
 import '../../../../client/src/App.css'
-
+import {CustomModal} from "../../shared/UI/Modal/CustomModal";
+import './allergyform.css';
 
 export const AllergyForm = forwardRef((props: any, ref) => {
     const [form] = Form.useForm();
@@ -39,10 +34,12 @@ export const AllergyForm = forwardRef((props: any, ref) => {
         },
         closeModal() {
             modalRef?.current?.closeModal();
+            afterCLose();
         },
     }))
     const handleEdit = () => {
         if (props.allergy) {
+            setEdit(true);
             let allergy = props.allergy;
             setFileList([
                 {uid: "-1", name: "", status: "done", url: allergy.image},
@@ -58,15 +55,18 @@ export const AllergyForm = forwardRef((props: any, ref) => {
         }
     }
     const afterCLose = () => {
+        setFileList([]);
         form.resetFields();
-        props.afterClose()
+        props.afterClose();
     }
 
     const handleOnChangeImage = async (file: any) => {
-
+        setFileList([
+            {uid: "-1", name: "", status: "done", url: URL.createObjectURL(file.fileList[0].originFileObj)},
+        ]);
     };
     const onFinish = async (values: IAllergy) => {
-        values.id =  props.allergy?.id
+        values.id = props.allergy?.id
         props.onSubmit(values);
     }
 
@@ -91,15 +91,15 @@ export const AllergyForm = forwardRef((props: any, ref) => {
 
     const onCancel = () => {
         modalRef?.current?.closeModal();
-
+        afterCLose();
     }
 
 
     return (
-        <NewModal ref={modalRef}
-                  afterCLose={afterCLose}
+        <CustomModal ref={modalRef}
+                     afterCLose={afterCLose}
         >
-            <Col className={'form-container'}>
+            <div className="form-container">
                 <Header>
                     {props.allergy ? 'Edit' : 'Create'} Allergy
                 </Header>
@@ -114,8 +114,8 @@ export const AllergyForm = forwardRef((props: any, ref) => {
                     onRemove,
                     onCancel
                 )}
-            </Col>
-        </NewModal>
+            </div>
+        </CustomModal>
     )
 })
 
@@ -129,11 +129,12 @@ const handleAllergyForm = (
         handlePreview: any,
         fileList: any,
         handleRemove: any,
-        onCancel:any
+        onCancel: any
     ) => {
         return (
             <Form
                 form={form}
+                className={'width-100'}
                 name="practitioner-form"
                 onFinish={onFinish}
                 layout={"vertical"}
@@ -261,7 +262,6 @@ const handleAllergyForm = (
                     </Button>
                     <Button htmlType="reset" onClick={onCancel}>
                         Cancel
-
                     </Button>
                 </Row>
             </Form>

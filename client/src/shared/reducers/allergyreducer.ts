@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice, Draft, PayloadAction,} from "@reduxjs/toolkit";
-import { ApiErrorResponse,} from "../../types/shared.types";
+import {ApiErrorResponse,} from "../../types/shared.types";
 
 import {create, edit, fetchAll, remove,} from "../../services/allergy.service";
 import {IAllergy} from "../../types/allergy.types";
@@ -56,7 +56,7 @@ export const editAllergy = createAsyncThunk(
     "allergies/editAllergy",
     async (data: any, {rejectWithValue}) => {
         try {
-            return await edit(data.formData,data.id);
+            return await edit(data.formData, data.id);
         } catch (err) {
             return rejectWithValue(err);
         }
@@ -132,9 +132,7 @@ const allergieslice = createSlice({
 
         builder.addCase(editAllergy.fulfilled, (state: Draft<IallergiesState>, action: any) => {
             state.isEditing = false;
-
-            const {data} = action.payload;
-
+            const data = action.payload;
             state.data.allergies = state.data.allergies.map((item: IAllergy) => {
                 if (item.id === data.id) {
                     return {

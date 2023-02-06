@@ -1,26 +1,22 @@
 import {createSlice, Draft} from '@reduxjs/toolkit'
 
 const initialState = {
-    isLoggedIn: false,
-    loading: false,
-    userInfo: {}, // for user object
-    userToken: null, // for storing the JWT
-    error: null,
-    success: false, // for monitoring the registration process.
+    isLoggedIn: !!localStorage.getItem('accessToken'),
 }
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        login: (state, action) => {
-            localStorage.setItem('accessToken',action.payload.accessToken)
-            localStorage.setItem('refreshToken',action.payload.refreshToken)
-            localStorage.setItem('userInfo',action.payload.userInfo)
+        login: (state:Draft<any>, action) => {
+            state.isLoggedIn = true
+            localStorage.setItem('accessToken',action.payload.accessToken);
+            localStorage.setItem('refreshToken',action.payload.refreshToken);
+            localStorage.setItem('userInfo',action.payload.userInfo);
         },
-        logout: () => {
-            initialState.isLoggedIn = false;
-            localStorage.clear()
+        logout: (state:Draft<any>) => {
+            state.isLoggedIn = false;
+            localStorage.clear();
         }
     }
 })

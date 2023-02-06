@@ -84,15 +84,20 @@ export const generateRefreshToken = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-    const refreshToken = req.cookies.refreshToken;
-    if (!refreshToken) return res.sendStatus(204);
-    const user = await UserSchema.findOne({
-        refreshToken: refreshToken
-    });
-    if (!user[0]) return res.sendStatus(204);
-    const userId = user.id;
-    await UserSchema.findByIdAndUpdate(userId, {refreshToken: null}
-    );
-    res.clearCookie('refreshToken');
-    return res.sendStatus(200);
+    try {
+        // const refreshToken = req.cookies.refreshToken;
+        // if (!refreshToken) return res.sendStatus(204);
+        // const user = await UserSchema.findOne({
+        //     refreshToken: refreshToken
+        // });
+        // if (!user[0]) return res.sendStatus(204);
+        // const userId = user[0].id;
+        // await UserSchema.findByIdAndUpdate(userId, {refreshToken: null}
+        // );
+        // res.clearCookie('refreshToken');
+        // return res.sendStatus(200);
+        return;
+    } catch (err) {
+        logger.error(err.toString());
+    }
 }

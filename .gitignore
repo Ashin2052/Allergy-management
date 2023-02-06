@@ -1,9 +1,7 @@
 **/node_modules
 **/dist
+**/.env.**
 
 node_modules
 build
 npm-debug.log
-.nyc
-.env
-.DS_Store

@@ -1,40 +1,30 @@
-import React, {useRef, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
-
+import React, {useEffect, useRef, useState} from "react";
 import {
     Typography,
     Avatar,
     Button,
     Col,
     Row,
-    notification,
     Popconfirm,
 } from "antd";
 import {EyeOutlined, PlusOutlined, DeleteOutlined} from "@ant-design/icons";
-
-import {
-    ApiErrorResponse,
-} from "../../types/shared.types";
 import {createAllergy, editAllergy, fetchAllergies, removeAllergy} from "../../shared/reducers/allergyreducer";
 import {useAppDispatch, useAppSelector} from "../../shared/hooks/redux.hooks";
 import {ColumnsType} from "antd/es/table";
-import TableComponent from "../../shared/UI/dataTable";
+import TableComponent from "../../shared/UI/Table/dataTable";
 import {IAllergy} from "../../types/allergy.types";
 import {AllergyForm} from "./AllergyForm";
 
 const {Title} = Typography;
 
 const AllergyList = () => {
-    const [api, contextHolder] = notification.useNotification();
-
     const allergy = useAppSelector((state) => state.allergy);
     const [showCartForm, setShowCartForm] = useState(false);
     const [selectEditAllergy, setSelectEditAllergy] = useState<any>();
-    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const tableRrf = useRef<any>();
 
-    React.useEffect(() => {
+    useEffect(() => {
         getAllergies().then(r => {
         });
     }, []);
@@ -43,21 +33,12 @@ const AllergyList = () => {
         setShowCartForm(!showCartForm);
     }
     const getAllergies = async () => {
-        try {
-            await dispatch(fetchAllergies());
-        } catch (error) {
-            const err = error as ApiErrorResponse;
-
-            api["error"]({
-                message: err.message || "Something went wrong",
-                description: `${err.data.info}` || "",
-            });
-        }
+        await dispatch(fetchAllergies());
     };
 
     const onEdit = async (value: any) => {
         await setSelectEditAllergy(value);
-        tableRrf?.current?.openModal()
+        tableRrf?.current?.openModal();
     }
 
     const handleDelete = async (id: string) => {
@@ -157,17 +138,14 @@ const AllergyList = () => {
             } else {
                 await dispatch(createAllergy(formData));
             }
-            getAllergies().then(r => {
-            })
+            getAllergies().then(r => {})
 
         } catch (err) {
-
+            console.error(err);
         }
     };
     return (
-        <div>
-            {contextHolder}
-
+        <div className={'page-container'}>
             <Row
                 justify="space-between"
                 align="middle"
@@ -194,7 +172,9 @@ const AllergyList = () => {
                          ref={tableRrf}
                          onSubmit={onsubmitForm}/>
             <TableComponent
-                columns={practitionerColumn} dataSource={allergy.data.allergies}/>
+                columns={practitionerColumn} dataSource={allergy.data.allergies.map((value,index) => {
+                return {...value, key: index};
+            })}/>
         </div>
     );
 };

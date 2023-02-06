@@ -1,4 +1,4 @@
-require('dotenv').config({ path: `src/.env.${process.env.NODE_ENV}` });
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
 
 export const applicationConfig = {
     PORT: process.env.PORT || 8080,

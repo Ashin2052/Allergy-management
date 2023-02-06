@@ -40,8 +40,13 @@
 .flex-row {
 
 }
+
 .pd-16 {
   padding: 16px;
+}
+
+.pb-24 {
+  padding-bottom: 24px;
 }
 .ml-16 {
   margin-left: 16px;
@@ -49,4 +54,10 @@
 
 .mr-16 {
   margin-right: 16px;
+}
+.width-100 {
+  width: 100%;
+}
+.page-container {
+  padding: 10px;
 }

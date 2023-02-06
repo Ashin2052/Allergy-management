@@ -1,16 +1,12 @@
-import {RouteProps, useLocation} from "react-router";
 import {Navigate} from 'react-router-dom';
-import {useSelector} from "react-redux";
+import {useAppSelector} from "./hooks/redux.hooks";
 
-
-export const PrivateRoute = ({children, hasAnyAuthorities = [], ...rest}: any) => {
-    const {user: authUser} = useSelector<any, any>(x => x.auth);
-
-    if (!authUser) {
+export const PrivateRoute = ({children}: any) => {
+    const authState = useAppSelector((state) => state.auth);
+    if (!authState.isLoggedIn) {
         // not logged in so redirect to login page with the return url
-        return <Navigate to="/login" state={{from: useLocation()}}/>
+        return <Navigate to="/login"/>
     }
-
     // authorized so return child components
     return children;
 }

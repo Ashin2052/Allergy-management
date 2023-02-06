@@ -1,5 +1,4 @@
 import React, {forwardRef, useImperativeHandle} from 'react';
-import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 
 const customStyles = {
@@ -7,7 +6,7 @@ const customStyles = {
         top: '30%',
         left: '50%',
         right: 'auto',
-        width:'35%',
+        width: '35%',
         bottom: 'auto',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
@@ -17,8 +16,7 @@ const customStyles = {
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement('#overlays');
 
-export const NewModal = forwardRef((props: any, ref) => {
-        let subtitle;
+export const CustomModal = forwardRef((props: any, ref) => {
         const [modalIsOpen, setIsOpen] = React.useState(false);
 
         useImperativeHandle(ref, () => ({

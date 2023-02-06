@@ -43,3 +43,7 @@ export type Column = {
     align?: 'right' | 'left';
     format?: (value: number) => string;
 }
+
+export type IChildrenProps = {
+    children: JSX.Element;
+}
