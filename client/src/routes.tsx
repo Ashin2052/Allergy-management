@@ -1,6 +1,6 @@
 import React from 'react';
 import {Navigate, Route, Routes} from 'react-router-dom';
-import {Login} from "./components/login/Login";
+import {Login} from "./components/login/login";
 import {PrivateRoute} from "./shared/auth";
 import {Home} from "./components/home/home";
 

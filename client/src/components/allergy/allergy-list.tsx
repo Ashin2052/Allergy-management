@@ -8,12 +8,12 @@ import {
     Popconfirm,
 } from "antd";
 import {EyeOutlined, PlusOutlined, DeleteOutlined} from "@ant-design/icons";
-import {createAllergy, editAllergy, fetchAllergies, removeAllergy} from "../../shared/reducers/allergyreducer";
+import {createAllergy, editAllergy, fetchAllergies, removeAllergy} from "../../shared/reducers/allergy-reducer";
 import {useAppDispatch, useAppSelector} from "../../shared/hooks/redux.hooks";
 import {ColumnsType} from "antd/es/table";
-import TableComponent from "../../shared/UI/Table/dataTable";
+import TableComponent from "../../shared/ui/table/dataTable";
 import {IAllergy} from "../../types/allergy.types";
-import {AllergyForm} from "./AllergyForm";
+import {AllergyForm} from "./allergy-form";
 
 const {Title} = Typography;
 

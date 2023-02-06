@@ -1,9 +1,9 @@
 import React, {useState} from "react";
-import "./Login.css";
+import "./login.css";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import api from "../../shared/api";
-import {login} from "../../shared/reducers/authreducer";
+import {login} from "../../shared/reducers/auth-reducer";
 import {Input} from "antd/lib";
 import {Button, Checkbox, Form} from "antd";
 

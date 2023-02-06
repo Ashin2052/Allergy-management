@@ -16,8 +16,8 @@ import {RcFile} from "antd/es/upload";
 import {forwardRef, useImperativeHandle, useRef, useState} from "react";
 import {Header} from "antd/es/layout/layout";
 import '../../../../client/src/App.css'
-import {CustomModal} from "../../shared/UI/Modal/CustomModal";
-import './allergyform.css';
+import {CustomModal} from "../../shared/ui/modal/custom-modal";
+import './allergy-form.css';
 
 export const AllergyForm = forwardRef((props: any, ref) => {
     const [form] = Form.useForm();
