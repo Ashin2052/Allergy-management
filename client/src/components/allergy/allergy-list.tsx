@@ -138,7 +138,8 @@ const AllergyList = () => {
             } else {
                 await dispatch(createAllergy(formData));
             }
-            getAllergies().then(r => {})
+            getAllergies().then(r => {
+            })
 
         } catch (err) {
             console.error(err);
@@ -152,7 +153,11 @@ const AllergyList = () => {
                 style={{marginBottom: "24px"}}
             >
                 <Col span={4}>
-                    <Title level={2}>Allergy List</Title>
+                    <Title
+                        level={2}
+                    >
+                        Allergy List
+                    </Title>
                 </Col>
                 <Col span={3}>
                     <Button
@@ -172,9 +177,10 @@ const AllergyList = () => {
                          ref={tableRrf}
                          onSubmit={onsubmitForm}/>
             <TableComponent
-                columns={practitionerColumn} dataSource={allergy.data.allergies.map((value,index) => {
-                return {...value, key: index};
-            })}/>
+                columns={practitionerColumn}
+                dataSource={allergy.data.allergies.map((value, index) => {
+                    return {...value, key: index};
+                })}/>
         </div>
     );
 };

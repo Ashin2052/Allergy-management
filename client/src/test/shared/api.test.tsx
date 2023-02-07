@@ -32,18 +32,4 @@ describe("fetchUsers", () => {
             expect(result.data).toEqual(users);
         });
     });
-
-    // describe("when API call fails", () => {
-    //     it("should return empty users list", async () => {
-    //         // given
-    //         mock.onGet(`${BASE_URL}/users`).networkErrorOnce();
-    //
-    //         // when
-    //         const result = await fetchUsers();
-    //
-    //         // then
-    //         expect(mock.history.get[0].url).toEqual(`${BASE_URL}/users`);
-    //         expect(result).toEqual([]);
-    //     });
-    // });
 });

@@ -21,7 +21,6 @@ import './allergy-form.css';
 
 export const AllergyForm = forwardRef((props: any, ref) => {
     const [form] = Form.useForm();
-    const [loading, setLoading] = useState(false);
     const [edit, setEdit] = useState(false);
     const [fileList, setFileList] = useState<any[]>([]);
     const modalRef = useRef<any>(null);
@@ -104,7 +103,6 @@ export const AllergyForm = forwardRef((props: any, ref) => {
                     {props.allergy ? 'Edit' : 'Create'} Allergy
                 </Header>
                 {handleAllergyForm(
-                    loading,
                     form,
                     edit,
                     onFinish,
@@ -121,7 +119,6 @@ export const AllergyForm = forwardRef((props: any, ref) => {
 
 
 const handleAllergyForm = (
-        loading: boolean,
         form: any,
         edit: boolean,
         onFinish: any,
