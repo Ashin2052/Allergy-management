@@ -3,4 +3,5 @@
 
 #misc
 **/.env.dev
+**/.env.development
 **/.env.test

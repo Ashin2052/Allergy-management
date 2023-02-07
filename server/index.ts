@@ -8,6 +8,7 @@ import {options} from './swagger';
 import {applicationConfig} from './src/configs/config';
 import logger from './src/configs/logger';
 import {dbConnect} from './src/configs/dbConnect';
+import {envConstant} from "./src/constants/application.constants";
 
 const swaggerUi = require('swagger-ui-express');
 
@@ -31,7 +32,7 @@ app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-w
 app.use('/api', routerManager);
 app.use(errorHandler);
 
-if(applicationConfig.ENV !== 'test') {
+if (applicationConfig.ENV !== envConstant.TEST) {
     app.listen(applicationConfig.PORT || 9000, () => {
         logger.info(`Server is listening on ${process.env.PORT}`);
     });
