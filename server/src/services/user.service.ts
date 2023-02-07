@@ -83,6 +83,7 @@ export const generateRefreshToken = async (req, res) => {
     }
 };
 
+//todo
 export const logout = async (req, res) => {
     try {
         // const refreshToken = req.cookies.refreshToken;
