@@ -1,6 +1,5 @@
-import {IAllergy, severityEnum} from "../../types/allergy.types";
+import { severityEnum} from "../../types/allergy.types";
 import {
-    Button,
     Col,
     Form,
     Input,
