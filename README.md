@@ -1,2 +1,22 @@
 # Allergy-management
-Allergy management system using MERN stack,
+Allergy management system using MERN stack.
+
+# BackEnd
+Install dependencies: ``` npm i```
+
+run: ``` NODE_ENV=dev npm run dev```
+
+For configuring environment, add .env file on root folder.
+```agsl
+MONGODB_URI = xx
+ACCESS_TOKEN_SECRET = xx
+REFRESH_TOKEN_SECRET = xx
+ORIGIN= xx
+PORT = xx
+HOST= xx
+```
+
+# FrontEnd
+Install dependencies: ``` npm i```
+
+run: ``` npm run start```
