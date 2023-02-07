@@ -55,6 +55,7 @@ export const AllergyForm = forwardRef((props: any, ref) => {
     }
     const afterCLose = () => {
         setFileList([]);
+        setEdit(false);
         form.resetFields();
         props.afterClose();
     }
@@ -64,9 +65,10 @@ export const AllergyForm = forwardRef((props: any, ref) => {
             {uid: "-1", name: "", status: "done", url: URL.createObjectURL(file.fileList[0].originFileObj)},
         ]);
     };
-    const onFinish = async (values: IAllergy) => {
-        values.id = props.allergy?.id
-        props.onSubmit(values);
+    const onFinish = async () => {
+        const formValue = form.getFieldsValue();
+        formValue.id = props.allergy?.id
+        props.onSubmit(formValue);
     }
 
     const handlePreview = async (file: UploadFile) => {
@@ -97,6 +99,9 @@ export const AllergyForm = forwardRef((props: any, ref) => {
     return (
         <CustomModal ref={modalRef}
                      afterCLose={afterCLose}
+                     okText={edit ? 'edit' : 'save'}
+                     onOk={onFinish}
+                     disableOk={!!form.getFieldsError()}
         >
             <div className="form-container">
                 <Header>
@@ -105,7 +110,6 @@ export const AllergyForm = forwardRef((props: any, ref) => {
                 {handleAllergyForm(
                     form,
                     edit,
-                    onFinish,
                     handleOnChangeImage,
                     handlePreview,
                     fileList,
@@ -121,7 +125,6 @@ export const AllergyForm = forwardRef((props: any, ref) => {
 const handleAllergyForm = (
         form: any,
         edit: boolean,
-        onFinish: any,
         onChangeImage: any,
         handlePreview: any,
         fileList: any,
@@ -133,7 +136,6 @@ const handleAllergyForm = (
                 form={form}
                 className={'width-100'}
                 name="practitioner-form"
-                onFinish={onFinish}
                 layout={"vertical"}
             >
                 <Row>
@@ -252,14 +254,6 @@ const handleAllergyForm = (
                             />
                         </Form.Item>
                     </Col>
-                </Row>
-                <Row>
-                    <Button className={'mr-16'} htmlType="submit">
-                        Save
-                    </Button>
-                    <Button htmlType="reset" onClick={onCancel}>
-                        Cancel
-                    </Button>
                 </Row>
             </Form>
 

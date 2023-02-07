@@ -8,7 +8,7 @@ import {options} from './swagger';
 import {applicationConfig} from './src/configs/config';
 import logger from './src/configs/logger';
 import {dbConnect} from './src/configs/dbConnect';
-import {envConstant} from "./src/constants/application.constants";
+import {envConstant} from './src/constants/application.constants';
 
 const swaggerUi = require('swagger-ui-express');
 

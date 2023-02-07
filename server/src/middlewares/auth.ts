@@ -1,4 +1,4 @@
-import {applicationConfig} from "../configs/config";
+import {applicationConfig} from '../configs/config';
 import {envConstant} from '../constants/application.constants';
 const jwt = require('jsonwebtoken');
 
