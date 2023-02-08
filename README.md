@@ -5,6 +5,7 @@ Allergy management system using MERN stack.
 Install dependencies: ``` npm i```
 
 run: ``` npm run dev```
+
 run test: ``` npm run test```
 
 For configuring environment, add .env file on root folder.
