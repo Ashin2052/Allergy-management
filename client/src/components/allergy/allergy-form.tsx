@@ -1,4 +1,4 @@
-import { severityEnum} from "../../types/allergy.types";
+import {severityEnum} from "../../types/allergy.types";
 import {
     Col,
     Form,
@@ -21,6 +21,7 @@ import './allergy-form.css';
 export const AllergyForm = forwardRef((props: any, ref) => {
     const [form] = Form.useForm();
     const [edit, setEdit] = useState(false);
+    const [hasFormError, setHasFormError] = useState(false);
     const [fileList, setFileList] = useState<any[]>([]);
     const modalRef = useRef<any>(null);
 
@@ -95,12 +96,16 @@ export const AllergyForm = forwardRef((props: any, ref) => {
     }
 
 
+    const onValueChange = async () => {
+        let error = form.getFieldsError().some(field => field.errors.length);
+        setHasFormError(error);
+    };
     return (
         <CustomModal ref={modalRef}
                      afterCLose={afterCLose}
                      okText={edit ? 'edit' : 'save'}
                      onOk={onFinish}
-                     disableOk={!!form.getFieldsError()}
+                     disableOk={hasFormError}
         >
             <div className="form-container">
                 <Header>
@@ -113,7 +118,8 @@ export const AllergyForm = forwardRef((props: any, ref) => {
                     handlePreview,
                     fileList,
                     onRemove,
-                    onCancel
+                    onCancel,
+                    onValueChange
                 )}
             </div>
         </CustomModal>
@@ -128,7 +134,8 @@ const handleAllergyForm = (
         handlePreview: any,
         fileList: any,
         handleRemove: any,
-        onCancel: any
+        onCancel: any,
+        onValueChange: any
     ) => {
         return (
             <Form
@@ -136,6 +143,7 @@ const handleAllergyForm = (
                 className={'width-100'}
                 name="practitioner-form"
                 layout={"vertical"}
+                onChange={onValueChange}
             >
                 <Row>
                     <Col>

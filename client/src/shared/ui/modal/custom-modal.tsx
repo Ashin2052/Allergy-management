@@ -41,7 +41,6 @@ export const CustomModal = forwardRef((props: any, ref) => {
             setIsOpen(false);
             props.onOk()
         }
-
         return (
             <div>
                 <Modal
