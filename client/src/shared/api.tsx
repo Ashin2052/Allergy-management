@@ -1,16 +1,19 @@
 import axios, {AxiosHeaders} from 'axios';
 
 const axiosInstance = axios.create();
-const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+const baseUrl = process.env.REACT_APP_API_ENDPOINT || 'http://localhost:8000';
 
 export const callApi = (data: IAxios, multipart = false) => {
     axiosInstance.defaults.headers['Content-Type'] = multipart
         ? `multipart/form-data` : "application/json"
 
+    const url = `${baseUrl}/api/${data.url}/${data.reqParams ? data.reqParams : ''}`
+        .replace(/\/$/, '');
+
     return axiosInstance({
         data: data.payload,
         method: data.method,
-        url: `${baseUrl}/api/${data.url}/${data.reqParams ? data.reqParams : ''}`,
+        url,
     });
 };
 
