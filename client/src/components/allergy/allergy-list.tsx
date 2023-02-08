@@ -14,6 +14,7 @@ import {ColumnsType} from "antd/es/table";
 import TableComponent from "../../shared/ui/table/dataTable";
 import {IAllergy} from "../../types/allergy.types";
 import {AllergyForm} from "./allergy-form";
+import {OpenNotification} from "../../shared/notification/notification";
 
 const {Title} = Typography;
 
@@ -23,7 +24,6 @@ const AllergyList = () => {
     const [selectEditAllergy, setSelectEditAllergy] = useState<any>();
     const dispatch = useAppDispatch();
     const tableRrf = useRef<any>();
-
     useEffect(() => {
         getAllergies().then(r => {
         });
@@ -138,7 +138,7 @@ const AllergyList = () => {
             formData.append('symptoms', values.symptoms);
             formData.append('description', values.description);
             if (values?.id) {
-                await dispatch(editAllergy({formData, id: values.id}))
+                await dispatch(editAllergy({formData, id: values.id}));
             } else {
                 await dispatch(createAllergy(formData));
             }
@@ -150,42 +150,44 @@ const AllergyList = () => {
         }
     };
     return (
-        <div className={'page-container'}>
-            <Row
-                justify="space-between"
-                align="middle"
-                style={{marginBottom: "24px"}}
-            >
-                <Col span={4}>
-                    <Title
-                        level={2}
-                    >
-                        Allergy List
-                    </Title>
-                </Col>
-                <Col span={3}>
-                    <Button
-                        type="primary"
-                        style={{width: "100%"}}
-                        icon={<PlusOutlined/>}
-                        onClick={() => tableRrf?.current?.openModal()}
-                    >
-                        Register Allergy
-                    </Button>
-                </Col>
-            </Row>
-            <AllergyForm allergy={selectEditAllergy}
-                         afterClose={() => {
-                             setSelectEditAllergy(null)
-                         }}
-                         ref={tableRrf}
-                         onSubmit={onsubmitForm}/>
-            <TableComponent
-                columns={practitionerColumn}
-                dataSource={allergy.data.allergies.map((value, index) => {
-                    return {...value, key: index};
-                })}/>
-        </div>
+        <>
+            <div className={'page-container'}>
+                <Row
+                    justify="space-between"
+                    align="middle"
+                    style={{marginBottom: "24px"}}
+                >
+                    <Col span={4}>
+                        <Title
+                            level={2}
+                        >
+                            Allergy List
+                        </Title>
+                    </Col>
+                    <Col span={3}>
+                        <Button
+                            type="primary"
+                            style={{width: "100%"}}
+                            icon={<PlusOutlined/>}
+                            onClick={() => tableRrf?.current?.openModal()}
+                        >
+                            Register Allergy
+                        </Button>
+                    </Col>
+                </Row>
+                <AllergyForm allergy={selectEditAllergy}
+                             afterClose={() => {
+                                 setSelectEditAllergy(null)
+                             }}
+                             ref={tableRrf}
+                             onSubmit={onsubmitForm}/>
+                <TableComponent
+                    columns={practitionerColumn}
+                    dataSource={allergy.data.allergies.map((value, index) => {
+                        return {...value, key: index};
+                    })}/>
+            </div>
+        </>
     );
 };
 

@@ -12,6 +12,7 @@ export const Login = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [error, setError] = useState(false);
 
     const onFinish = (formValues: any) => {
         api({
@@ -20,9 +21,10 @@ export const Login = () => {
             payload: formValues
         }).then((value) => {
             dispatch(login(value));
+            setError(false)
             navigate('/home')
         }).catch((err) => {
-            console.log(err)
+            setError(true)
         })
     };
 
@@ -61,7 +63,10 @@ export const Login = () => {
                         <Input.Password/>
                     </Form.Item>
                 </div>
-
+                {error && <div className={"error-msg"}>
+                    please check your credentials.
+                </div>
+                }
                 <Form.Item name="remember" valuePropName="checked" wrapperCol={{offset: 8, span: 16}}>
                     <Checkbox>Remember me</Checkbox>
                 </Form.Item>
