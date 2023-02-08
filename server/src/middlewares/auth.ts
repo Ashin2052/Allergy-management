@@ -1,4 +1,5 @@
-import {applicationConfig} from "../configs/config";
+import {applicationConfig} from '../configs/config';
+import {envConstant} from '../constants/application.constants';
 const jwt = require('jsonwebtoken');
 
 /**
@@ -9,7 +10,7 @@ const jwt = require('jsonwebtoken');
  */
 const verifyToken = (req, res, next) => {
     // for super test
-    if (applicationConfig.ENV === 'test') return next();
+    if (applicationConfig.ENV === envConstant.TEST) return next();
     const token =
         req.body.token || req.query.token || req.headers['x-access-token'];
     if (!token) {

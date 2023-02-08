@@ -1,5 +1,5 @@
 import React, {forwardRef, useImperativeHandle} from 'react';
-import Modal from 'react-modal';
+import Modal from "antd/es/modal/Modal";
 
 const customStyles = {
     content: {
@@ -14,7 +14,7 @@ const customStyles = {
 };
 
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
-Modal.setAppElement('#overlays');
+// Modal.setAppElement('#overlays');
 
 export const CustomModal = forwardRef((props: any, ref) => {
         const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -29,21 +29,27 @@ export const CustomModal = forwardRef((props: any, ref) => {
         }))
 
 
-        function afterOpenModal() {}
+        function afterOpenModal() {
+        }
 
         function closeModal() {
             setIsOpen(false);
             props.afterCLose();
         }
 
+        function onOk() {
+            setIsOpen(false);
+            props.onOk()
+        }
+
         return (
             <div>
                 <Modal
-                    isOpen={modalIsOpen}
-                    onAfterOpen={afterOpenModal}
-                    onRequestClose={closeModal}
-                    style={customStyles}
-                    contentLabel="Example Modal"
+                    open={modalIsOpen}
+                    afterClose={closeModal}
+                    onCancel={closeModal}
+                    onOk={onOk}
+                    okText={props.okText}
                 >
                     {props.children}
                 </Modal>

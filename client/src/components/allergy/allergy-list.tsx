@@ -33,7 +33,11 @@ const AllergyList = () => {
         setShowCartForm(!showCartForm);
     }
     const getAllergies = async () => {
-        await dispatch(fetchAllergies());
+        try {
+            await dispatch(fetchAllergies());
+        } catch (err) {
+            return;
+        }
     };
 
     const onEdit = async (value: any) => {

@@ -1,19 +1,20 @@
 import axios, {AxiosHeaders} from 'axios';
 
+const axiosInstance = axios.create();
 const baseUrl = process.env.REACT_APP_API_ENDPOINT;
+
 export const callApi = (data: IAxios, multipart = false) => {
-    return axios({
+    axiosInstance.defaults.headers['Content-Type'] = multipart
+        ? `multipart/form-data` : "application/json"
+
+    return axiosInstance({
         data: data.payload,
         method: data.method,
         url: `${baseUrl}/api/${data.url}/${data.reqParams ? data.reqParams : ''}`,
-        headers: {
-            "Content-Type": multipart
-                ? `multipart/form-data` : "application/json"
-        },
     });
 };
 
-axios.interceptors.request.use(
+axiosInstance.interceptors.request.use(
     (config) => {
         const accessToken = localStorage.getItem("accessToken");
         if (accessToken) {
@@ -29,7 +30,7 @@ axios.interceptors.request.use(
 );
 
 //response interceptor to refresh token on receiving token expired error
-axios.interceptors.response.use(
+axiosInstance.interceptors.response.use(
     (response) => {
         return response.data;
     },
@@ -49,7 +50,7 @@ axios.interceptors.response.use(
                 payload: {refreshToken}
             }).then((res: any) => {
                 localStorage.setItem("accessToken", res.accessToken);
-                return axios(originalRequest);
+                return axiosInstance(originalRequest);
 
             }).catch((Err) => {
                 window.location.href = '/login';
@@ -61,6 +62,7 @@ axios.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+export {axiosInstance};
 
 export interface IAxios {
     method: 'get' | 'post' | 'put' | 'delete',
