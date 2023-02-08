@@ -49,6 +49,7 @@ export const CustomModal = forwardRef((props: any, ref) => {
                     afterClose={closeModal}
                     onCancel={closeModal}
                     onOk={onOk}
+                    okButtonProps={{disabled: props.disableOk}}
                     okText={props.okText}
                 >
                     {props.children}
