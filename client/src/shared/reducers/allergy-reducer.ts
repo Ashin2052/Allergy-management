@@ -31,7 +31,7 @@ const initialState: IallergiesState = {
 };
 
 export const fetchAllergies = createAsyncThunk(
-    'allergies/fetchAllAllergies',
+    'allergy/fetchAllAllergies',
     async (_, {rejectWithValue}) => {
         try {
             return await fetchAll();
@@ -42,7 +42,7 @@ export const fetchAllergies = createAsyncThunk(
 );
 
 export const createAllergy = createAsyncThunk(
-    'allergies/createAllergy',
+    'allergy/createAllergy',
     async (payload: FormData, {rejectWithValue}) => {
         try {
             return await create(payload);
@@ -53,7 +53,7 @@ export const createAllergy = createAsyncThunk(
 );
 
 export const editAllergy = createAsyncThunk(
-    'allergies/editAllergy',
+    'allergy/editAllergy',
     async (data: any, {rejectWithValue}) => {
         try {
             return await edit(data.formData, data.id);
@@ -64,7 +64,7 @@ export const editAllergy = createAsyncThunk(
 );
 
 export const removeAllergy = createAsyncThunk(
-    'allergies/removeAllergy',
+    'allergy/removeAllergy',
     async (id: string, {rejectWithValue}) => {
         try {
             return await remove(id);
@@ -75,7 +75,7 @@ export const removeAllergy = createAsyncThunk(
 );
 
 const allergieslice = createSlice({
-    name: 'Allergy',
+    name: 'allergy',
     initialState,
 
     reducers: {
