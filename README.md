@@ -1,5 +1,5 @@
 # Allergy-management
-Allergy management system using MERN stack.
+Simple Allergy management system using MERN(Typescript) stack.
 
 # BackEnd
 Install dependencies: ``` npm i```
